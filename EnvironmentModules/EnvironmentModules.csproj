@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnvironmentModuleFunctionInfo.cs" />
     <Compile Include="EnvironmentModule.cs" />
     <Compile Include="EnvironmentModuleAliasInfo.cs" />
     <Compile Include="EnvironmentModuleInfo.cs" />

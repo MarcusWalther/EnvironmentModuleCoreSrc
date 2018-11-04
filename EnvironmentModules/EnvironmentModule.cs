@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-
-namespace EnvironmentModules
+﻿namespace EnvironmentModules
 {
+    using System.Collections.Generic;
+
     public class EnvironmentModule : EnvironmentModuleInfo
     {
         #region Properties
@@ -32,12 +29,12 @@ namespace EnvironmentModules
         /// A collection of aliases (dictionary-keys) that are set if the module is loaded. The aliases
         /// are deleted if unload is called. The value represents the command and an optional description.
         /// </summary>
-        public Dictionary<string,Tuple<string,string>> Aliases { get; protected set; }
+        public Dictionary<string, EnvironmentModuleAliasInfo> Aliases { get; protected set; }
         /// <summary>
         /// A collection of aliases (dictionary-keys) that are set if the module is loaded. The aliases
-        /// are deleted if unload is called. The value represents the command and an optional description.
+        /// are deleted if unload is called. The value represents the command.
         /// </summary>
-        public Dictionary<string, System.Management.Automation.ScriptBlock> Functions { get; protected set; }
+        public Dictionary<string, EnvironmentModuleFunctionInfo> Functions { get; protected set; }
 
         /// <summary>
         /// This value indicates if the module was loaded by the user or as dependency of another module.
@@ -57,8 +54,8 @@ namespace EnvironmentModules
             PrependPaths = new Dictionary<string, List<string>>();
             AppendPaths = new Dictionary<string, List<string>>();
             SetPaths = new Dictionary<string, List<string>>();
-            Aliases = new Dictionary<string, Tuple<string,string>>();
-            Functions = new Dictionary<string, System.Management.Automation.ScriptBlock>();
+            Aliases = new Dictionary<string, EnvironmentModuleAliasInfo>();
+            Functions = new Dictionary<string, EnvironmentModuleFunctionInfo>();
         }
         #endregion
 
@@ -88,12 +85,12 @@ namespace EnvironmentModules
 
         public void AddAlias(string aliasName, string command, string description="")
         {
-            Aliases[aliasName] = new Tuple<string, string>(command,description);
+            Aliases[aliasName] = new EnvironmentModuleAliasInfo(aliasName, FullName, command, description);
         }
 
         public void AddFunction(string functionName, System.Management.Automation.ScriptBlock content)
         {
-            Functions[functionName] = content;
+            Functions[functionName] = new EnvironmentModuleFunctionInfo(functionName, FullName, content);
         }
 
         public override bool Equals(object obj)
