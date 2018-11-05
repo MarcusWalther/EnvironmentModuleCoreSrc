@@ -1,9 +1,12 @@
 ﻿namespace EnvironmentModules
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     public class EnvironmentModule : EnvironmentModuleInfo
     {
+        private Dictionary<string, EnvironmentModulePathInfo> pathInfos;
+
         #region Properties
         public string ModuleRoot { get; private set; }
         /// <summary>
@@ -11,20 +14,25 @@
         /// </summary>
         public int ReferenceCounter { get; set; }
         /// <summary>
-        /// A collection of paths (dictionary-value) that are added to the front of the environment-variable (dictionary-key) if the module is loaded. The values
-        /// are removed from the environment-variable if unload is called.
+        /// A collection of paths that are added to the environment variables when the module is loaded. The values
+        /// are removed from the environment-variable when unload is called.
         /// </summary>
-        public Dictionary<string, List<string>> PrependPaths { get; protected set; }
+        public HashSet<EnvironmentModulePathInfo> Paths { get { return new HashSet<EnvironmentModulePathInfo>(pathInfos.Values); } }
         /// <summary>
-        /// A collection of paths (dictionary-value) that are added to the back of the environment-variable (dictionary-key) if the module is loaded. The values
-        /// are removed from the environment-variable if unload is called.
+        /// A collection of paths that are appended to the environment variables when the module is loaded. The values
+        /// are removed from the environment-variable when unload is called.
         /// </summary>
-        public Dictionary<string, List<string>> AppendPaths { get; protected set; }
+        public HashSet<EnvironmentModulePathInfo> AppendPaths { get { return new HashSet<EnvironmentModulePathInfo>(pathInfos.Values.Where(x => x.PathType == EnvironmentModulePathType.APPEND)); } }
         /// <summary>
-        /// A collection of paths (dictionary-value) that are set as environment-variable (dictionary-key) if the module is loaded. The values
-        /// are deleted if unload is called.
+        /// A collection of paths that are prepended to the environment variables when the module is loaded. The values
+        /// are removed from the environment-variable when unload is called.
         /// </summary>
-        public Dictionary<string, List<string>> SetPaths { get; protected set; }
+        public HashSet<EnvironmentModulePathInfo> PrependPaths { get { return new HashSet<EnvironmentModulePathInfo>(pathInfos.Values.Where(x => x.PathType == EnvironmentModulePathType.PREPEND)); } }
+        /// <summary>
+        /// A collection of paths that are set to the environment variables when the module is loaded. The values
+        /// are removed from the environment-variable when unload is called.
+        /// </summary>
+        public HashSet<EnvironmentModulePathInfo> SetPaths { get { return new HashSet<EnvironmentModulePathInfo>(pathInfos.Values.Where(x => x.PathType == EnvironmentModulePathType.SET)); } }
         /// <summary>
         /// A collection of aliases (dictionary-keys) that are set if the module is loaded. The aliases
         /// are deleted if unload is called. The value represents the command and an optional description.
@@ -51,36 +59,41 @@
         {
             ModuleRoot = moduleRoot;
             IsLoadedDirectly = isLoadedDirectly;
-            PrependPaths = new Dictionary<string, List<string>>();
-            AppendPaths = new Dictionary<string, List<string>>();
-            SetPaths = new Dictionary<string, List<string>>();
+            pathInfos = new Dictionary<string, EnvironmentModulePathInfo>();
             Aliases = new Dictionary<string, EnvironmentModuleAliasInfo>();
             Functions = new Dictionary<string, EnvironmentModuleFunctionInfo>();
         }
         #endregion
 
+        protected void AddPath(EnvironmentModulePathType pathType, string variable, string value)
+        {
+            string key = $"{pathType.ToString()}_{variable}";
+            EnvironmentModulePathInfo info;
+            if(!pathInfos.TryGetValue(key, out info))
+            {
+                info = new EnvironmentModulePathInfo(FullName, pathType, variable, new List<string>() { value });
+            }
+            else
+            {
+                info.Values.Add(value);
+            }
+
+            pathInfos[key] = info;
+        }
+
         public void AddPrependPath(string envVar, string path)
         {
-            if (!PrependPaths.ContainsKey(envVar))
-                PrependPaths[envVar] = new List<string>();
-
-            PrependPaths[envVar].Add(path);
+            AddPath(EnvironmentModulePathType.PREPEND, envVar, path);
         }
 
         public void AddAppendPath(string envVar, string path)
         {
-            if (!AppendPaths.ContainsKey(envVar))
-                AppendPaths[envVar] = new List<string>();
-
-            AppendPaths[envVar].Add(path);
+            AddPath(EnvironmentModulePathType.APPEND, envVar, path);
         }
 
         public void AddSetPath(string envVar, string path)
         {
-            if (!SetPaths.ContainsKey(envVar))
-                SetPaths[envVar] = new List<string>();
-
-            SetPaths[envVar].Add(path);
+            AddPath(EnvironmentModulePathType.SET, envVar, path);
         }
 
         public void AddAlias(string aliasName, string command, string description="")
