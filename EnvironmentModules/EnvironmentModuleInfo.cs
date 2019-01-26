@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Management.Automation;
 
     public class EnvironmentModuleInfo : EnvironmentModuleInfoBase
     {
@@ -67,8 +68,13 @@
         /// </summary>
         public double StyleVersion { get; set; }
 
+        /// <summary>
+        /// The category (default storage path) of the environment module.
+        /// </summary>
+        public string Category { get; set; }
+
         public EnvironmentModuleInfo(
-            string fullName,
+            PSModuleInfo psModuleInfo,
             DirectoryInfo moduleBase,
             string name,
             string version,
@@ -79,7 +85,8 @@
             SearchPath[] searchPaths = null,
             string[] requiredFiles = null,
             bool directUnload = false,
-            double styleVersion = 0.0) : base(fullName, moduleType)
+            double styleVersion = 0.0,
+            string category = "") : base(psModuleInfo, moduleType)
         {
             ModuleBase = moduleBase;
             Name = name;
@@ -93,6 +100,7 @@
 
             DirectUnload = directUnload;
             StyleVersion = styleVersion;
+            Category = category;
         }
 
         /// <summary>
@@ -100,17 +108,18 @@
         /// </summary>
         /// <param name="other"></param>
         public EnvironmentModuleInfo(EnvironmentModuleInfo other) :
-            this(other.FullName,
-                other.ModuleBase,
-                other.Name, other.Version,
-                other.Architecture,
-                other.AdditionalInfo,
-                other.ModuleType,
-                other.RequiredEnvironmentModules,
-                other.SearchPaths,
-                other.RequiredFiles,
-                other.DirectUnload,
-                other.StyleVersion)
+            this(other.PSModuleInfo,
+                 other.ModuleBase,
+                 other.Name, other.Version,
+                 other.Architecture,
+                 other.AdditionalInfo,
+                 other.ModuleType,
+                 other.RequiredEnvironmentModules,
+                 other.SearchPaths,
+                 other.RequiredFiles,
+                 other.DirectUnload,
+                 other.StyleVersion,
+                 other.Category)
         { }
     }
 }

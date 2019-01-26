@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DotLiquidTemplateRenderer.cs" />
     <Compile Include="EnvironmentModuleFunctionInfo.cs" />
     <Compile Include="EnvironmentModule.cs" />
     <Compile Include="EnvironmentModuleAliasInfo.cs" />
@@ -59,9 +60,13 @@
     <Compile Include="EnvironmentModulePathInfo.cs" />
     <Compile Include="EnvironmentModuleSearchPath.cs" />
     <Compile Include="ModuleCreator.cs" />
+    <Compile Include="NuSpecCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\EnvironmentModules\Templates\EnvironmentModule.nuspec.template">
+      <Link>EnvironmentModule.nuspec.template</Link>
+    </None>
     <None Include="..\..\EnvironmentModules\Templates\EnvironmentModule.psd1.template">
       <Link>EnvironmentModule.psd1.template</Link>
     </None>

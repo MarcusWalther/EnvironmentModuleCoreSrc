@@ -1,4 +1,6 @@
-﻿namespace EnvironmentModules
+﻿using System.Management.Automation;
+
+namespace EnvironmentModules
 {
     /// <summary>
     /// This enum defines all types that Environment Modules can have.
@@ -31,10 +33,16 @@
         /// </summary>
         public EnvironmentModuleType ModuleType { get; set; }
 
-        public EnvironmentModuleInfoBase(string fullName, EnvironmentModuleType moduleType = EnvironmentModuleType.Default)
+        /// <summary>
+        /// The PS module info object associated to the environment module.
+        /// </summary>
+        public PSModuleInfo PSModuleInfo { get; set; }
+
+        public EnvironmentModuleInfoBase(PSModuleInfo psModuleInfo, EnvironmentModuleType moduleType = EnvironmentModuleType.Default)
         {
-            FullName = fullName;
+            FullName = psModuleInfo.Name;
             ModuleType = moduleType;
+            PSModuleInfo = psModuleInfo;
         }
     }
 }

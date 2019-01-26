@@ -49,7 +49,8 @@ namespace EnvironmentModules
                 CustomCode      = "",
                 AdditionalDescription = additionalDescription,
                 DirectUnload    = $"${directUnload}",
-                ModuleType      = EnvironmentModuleType.Meta.ToString()
+                ModuleType      = EnvironmentModuleType.Meta.ToString(),
+                Category        = ""
             };
 
             FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psd1.template"));
@@ -61,37 +62,28 @@ namespace EnvironmentModules
         
         public static void CreateEnvironmentModule(string name, string rootDirectory, string description, string workingDirectory = null, 
                                                    string author = null, string version = null, string architecture = null, 
-                                                   string executable = null, string[] additionalEnvironmentModules = null)
+                                                   string executable = null, string[] additionalEnvironmentModules = null, string category = null)
         {
             if (string.IsNullOrEmpty(name))
-            {
                 throw new EnvironmentModuleException("The name cannot be empty");
-            }
 
             if (workingDirectory == null)
-            {
                 workingDirectory = Directory.GetCurrentDirectory();
-            }
 
             if (!new DirectoryInfo(workingDirectory).Exists)
-            {
                 throw new EnvironmentModuleException($"The given working directory '{workingDirectory}' does not exist");
-            }
 
             if (string.IsNullOrEmpty(author))
-            {
                 author = "";
-            }
 
             if (string.IsNullOrEmpty(description))
-            {
                 description = "";
-            }
 
             if (additionalEnvironmentModules == null)
-            {
                 additionalEnvironmentModules = new string[] {};
-            }
+
+            if (string.IsNullOrEmpty(category))
+                category = "";
 
             FileInfo executableFile;
             if (!string.IsNullOrEmpty(executable))
@@ -124,7 +116,8 @@ namespace EnvironmentModules
                 AdditionalDescription = description,
                 CustomCode = "",
                 DirectUnload = "$false",
-                ModuleType = EnvironmentModuleType.Default.ToString()
+                ModuleType = EnvironmentModuleType.Default.ToString(),
+                Category = category
             }; 
 
             FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psd1.template"));
@@ -158,25 +151,7 @@ namespace EnvironmentModules
                 [templatePse.FullName] = Path.Combine(targetDirectory.FullName, targetName + ".pse1")
             };
 
-            CreateConcreteFileFromTemplate(modelDefinition, templateFiles);
-        }
-        
-        private static void CreateConcreteFileFromTemplate(object modelDefinition, Dictionary<string, string> templateFiles)
-        {
-            foreach (KeyValuePair<string, string> templateFile in templateFiles)
-            {
-                FileInfo templateFileInfo = new FileInfo(templateFile.Key);
-
-                if (!templateFileInfo.Exists)
-                {
-                    throw new EnvironmentModuleException($"The template file '{templateFileInfo.FullName}' does not exist");
-                }
-
-                string templateContent = File.ReadAllText(templateFile.Key);
-                Template template = Template.Parse(templateContent);
-                string concreteContent = template.Render(Hash.FromAnonymousObject(modelDefinition));
-                File.WriteAllText(templateFile.Value, concreteContent);
-            }
+            DotLiquidTemplateRenderer.CreateConcreteFilesFromTemplates(modelDefinition, templateFiles);
         }
     }
 }
