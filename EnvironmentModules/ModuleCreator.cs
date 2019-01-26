@@ -50,7 +50,8 @@ namespace EnvironmentModules
                 AdditionalDescription = additionalDescription,
                 DirectUnload    = $"${directUnload}",
                 ModuleType      = EnvironmentModuleType.Meta.ToString(),
-                Category        = ""
+                Category        = "",
+                Parameters      = new Dictionary<string, string>()
             };
 
             FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psd1.template"));
@@ -62,7 +63,8 @@ namespace EnvironmentModules
         
         public static void CreateEnvironmentModule(string name, string rootDirectory, string description, string workingDirectory = null, 
                                                    string author = null, string version = null, string architecture = null, 
-                                                   string executable = null, string[] additionalEnvironmentModules = null, string category = null)
+                                                   string executable = null, string[] additionalEnvironmentModules = null, string category = null,
+                                                   Dictionary<string, string> parameters = null)
         {
             if (string.IsNullOrEmpty(name))
                 throw new EnvironmentModuleException("The name cannot be empty");
@@ -84,6 +86,9 @@ namespace EnvironmentModules
 
             if (string.IsNullOrEmpty(category))
                 category = "";
+
+            if (parameters == null)
+                parameters = new Dictionary<string, string>();
 
             FileInfo executableFile;
             if (!string.IsNullOrEmpty(executable))
@@ -117,7 +122,8 @@ namespace EnvironmentModules
                 CustomCode = "",
                 DirectUnload = "$false",
                 ModuleType = EnvironmentModuleType.Default.ToString(),
-                Category = category
+                Category = category,
+                Parameters = parameters
             }; 
 
             FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psd1.template"));

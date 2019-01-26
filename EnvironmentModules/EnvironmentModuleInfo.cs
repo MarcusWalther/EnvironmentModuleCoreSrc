@@ -1,6 +1,7 @@
 ﻿namespace EnvironmentModules
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Management.Automation;
 
@@ -11,6 +12,11 @@
         /// PowerShell module.
         /// </summary>
         public DirectoryInfo ModuleBase { get; set; }
+
+        /// <summary>
+        /// The temporary directory that can be used to store files.
+        /// </summary>
+        public DirectoryInfo TmpDirectory { get; set; }
 
         /// <summary>
         /// The short name of the module.
@@ -73,9 +79,15 @@
         /// </summary>
         public string Category { get; set; }
 
+        /// <summary>
+        /// The parameters defaults defined by the module.
+        /// </summary>
+        public Dictionary<string, string> Parameters { get; set; }
+
         public EnvironmentModuleInfo(
             PSModuleInfo psModuleInfo,
             DirectoryInfo moduleBase,
+            DirectoryInfo tmpDirectory,
             string name,
             string version,
             string architecture,
@@ -86,9 +98,11 @@
             string[] requiredFiles = null,
             bool directUnload = false,
             double styleVersion = 0.0,
-            string category = "") : base(psModuleInfo, moduleType)
+            string category = "",
+            Dictionary<string, string> parameters = null) : base(psModuleInfo, moduleType)
         {
             ModuleBase = moduleBase;
+            TmpDirectory = tmpDirectory;
             Name = name;
             Version = version;
             Architecture = architecture;
@@ -101,6 +115,7 @@
             DirectUnload = directUnload;
             StyleVersion = styleVersion;
             Category = category;
+            Parameters = parameters == null ? new Dictionary<string, string>() : parameters;
         }
 
         /// <summary>
@@ -110,6 +125,7 @@
         public EnvironmentModuleInfo(EnvironmentModuleInfo other) :
             this(other.PSModuleInfo,
                  other.ModuleBase,
+                 other.TmpDirectory,
                  other.Name, other.Version,
                  other.Architecture,
                  other.AdditionalInfo,
@@ -119,7 +135,8 @@
                  other.RequiredFiles,
                  other.DirectUnload,
                  other.StyleVersion,
-                 other.Category)
+                 other.Category,
+                 other.Parameters)
         { }
     }
 }
