@@ -57,6 +57,7 @@
     <Compile Include="EnvironmentModuleInfo.cs" />
     <Compile Include="EnvironmentModuleException.cs" />
     <Compile Include="EnvironmentModuleInfoBase.cs" />
+    <Compile Include="EnvironmentModuleParameterInfo.cs" />
     <Compile Include="EnvironmentModulePathInfo.cs" />
     <Compile Include="EnvironmentModuleSearchPath.cs" />
     <Compile Include="ModuleCreator.cs" />
