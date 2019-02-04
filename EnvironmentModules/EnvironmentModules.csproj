@@ -50,7 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DotLiquidTemplateRenderer.cs" />
+    <Compile Include="DependencyInfo.cs" />
+    <Compile Include="TemplateRenderer.cs" />
     <Compile Include="EnvironmentModuleFunctionInfo.cs" />
     <Compile Include="EnvironmentModule.cs" />
     <Compile Include="EnvironmentModuleAliasInfo.cs" />

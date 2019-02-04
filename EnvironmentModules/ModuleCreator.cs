@@ -45,7 +45,7 @@ namespace EnvironmentModules
                 Guid            = Guid.NewGuid(),
                 ModuleRoot      = "\".\\\"",
                 RequiredModules = "\"EnvironmentModules\"",
-                RequiredEnvironmentModules = additionalEnvironmentModules.Length > 0 ? additionalEnvironmentModules.Select(x => $"\"x\"").Aggregate((a, b) => a + "," + b ) : "",
+                Dependencies = additionalEnvironmentModules.Length > 0 ? additionalEnvironmentModules.Select(x => $"\"x\"").Aggregate((a, b) => a + "," + b ) : "",
                 CustomCode      = "",
                 AdditionalDescription = additionalDescription,
                 DirectUnload    = $"${directUnload}",
@@ -63,7 +63,7 @@ namespace EnvironmentModules
         
         public static void CreateEnvironmentModule(string name, string rootDirectory, string description, string workingDirectory = null, 
                                                    string author = null, string version = null, string architecture = null, 
-                                                   string executable = null, string[] additionalEnvironmentModules = null, string category = null,
+                                                   string executable = null, DependencyInfo[] dependencies = null, string category = null,
                                                    Dictionary<string, string> parameters = null)
         {
             if (string.IsNullOrEmpty(name))
@@ -81,8 +81,8 @@ namespace EnvironmentModules
             if (string.IsNullOrEmpty(description))
                 description = "";
 
-            if (additionalEnvironmentModules == null)
-                additionalEnvironmentModules = new string[] {};
+            if (dependencies == null)
+                dependencies = new DependencyInfo[] {};
 
             if (string.IsNullOrEmpty(category))
                 category = "";
@@ -117,7 +117,7 @@ namespace EnvironmentModules
                 FileName = executableFile.Name,
                 SearchDirectories = $"\"{executableFile.DirectoryName}\"",
                 RequiredModules = "\"EnvironmentModules\"",
-                RequiredEnvironmentModules = additionalEnvironmentModules.Length > 0 ? additionalEnvironmentModules.Select(x => $"\"{x}\"").Aggregate((a, b) => a + "," + b) : "",
+                Dependencies = dependencies.Length > 0 ? dependencies.Select(x => $"@{{Name=\"{x.ModuleFullName}\"; Optional=${x.IsOptional.ToString()}}}").Aggregate((a, b) => a + "," + b) : "",
                 AdditionalDescription = description,
                 CustomCode = "",
                 DirectUnload = "$false",
@@ -157,7 +157,7 @@ namespace EnvironmentModules
                 [templatePse.FullName] = Path.Combine(targetDirectory.FullName, targetName + ".pse1")
             };
 
-            DotLiquidTemplateRenderer.CreateConcreteFilesFromTemplates(modelDefinition, templateFiles);
+            TemplateRenderer.CreateConcreteFilesFromTemplates(modelDefinition, templateFiles);
         }
     }
 }

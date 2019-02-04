@@ -41,7 +41,7 @@
         /// <summary>
         /// All environment modules that must be loaded prior this module can be used.
         /// </summary>
-        public string[] RequiredEnvironmentModules { get; set; }
+        public DependencyInfo[] Dependencies { get; set; }
 
         /// <summary>
         /// The values associated with these search paths are checked.
@@ -93,7 +93,7 @@
             string architecture,
             string additionalInfo = "",
             EnvironmentModuleType moduleType = EnvironmentModuleType.Default,
-            string[] requiredEnvironmentModules = null,
+            DependencyInfo[] dependencies = null,
             SearchPath[] searchPaths = null,
             string[] requiredFiles = null,
             bool directUnload = false,
@@ -108,7 +108,7 @@
             Architecture = architecture;
             AdditionalInfo = additionalInfo;
 
-            RequiredEnvironmentModules = requiredEnvironmentModules ?? new string[0];
+            Dependencies = dependencies ?? new DependencyInfo[0];
             SearchPaths = searchPaths ?? new SearchPath[0];
             RequiredFiles = requiredFiles ?? new string[0];
 
@@ -130,7 +130,7 @@
                  other.Architecture,
                  other.AdditionalInfo,
                  other.ModuleType,
-                 other.RequiredEnvironmentModules,
+                 other.Dependencies,
                  other.SearchPaths,
                  other.RequiredFiles,
                  other.DirectUnload,

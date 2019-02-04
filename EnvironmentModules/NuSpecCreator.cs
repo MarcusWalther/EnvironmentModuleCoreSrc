@@ -22,7 +22,7 @@ namespace EnvironmentModules
                 Version = environmentModule.PSModuleInfo.Version.ToString(),
                 Authors = environmentModule.PSModuleInfo.Author,
                 Description = $"{environmentModule.FullName} EnvironmentModule",
-                Dependencies = environmentModule.RequiredEnvironmentModules
+                Dependencies = environmentModule.Dependencies
             };
 
             FileInfo templateNuspec = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.nuspec.template"));
@@ -31,7 +31,7 @@ namespace EnvironmentModules
                 [templateNuspec.FullName] = Path.Combine(environmentModule.ModuleBase.FullName, environmentModule.FullName + ".nuspec")
             };
 
-            DotLiquidTemplateRenderer.CreateConcreteFilesFromTemplates(modelDefinition, templateFiles);
+            TemplateRenderer.CreateConcreteFilesFromTemplates(modelDefinition, templateFiles);
         }
     }
 }
