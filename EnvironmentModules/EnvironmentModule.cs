@@ -8,6 +8,9 @@
         private Dictionary<string, EnvironmentModulePathInfo> pathInfos;
 
         #region Properties
+        /// <summary>
+        /// The path to the root directory of the module.
+        /// </summary>
         public string ModuleRoot { get; private set; }
         /// <summary>
         /// A reference counter indicating that is decreased when the module is removed and increased when loaded.
@@ -48,17 +51,23 @@
         /// This value indicates if the module was loaded by the user or as dependency of another module.
         /// </summary>
         public bool IsLoadedDirectly { get; set; }
+        /// <summary>
+        /// Gets the module that has triggered the loading of the module. The value is null if the module was loaded directly by the user.
+        /// </summary>
+        public EnvironmentModuleInfo SourceModule { get; protected set; }
         #endregion
 
         #region Constructors
         public EnvironmentModule(
             EnvironmentModuleInfo baseModule,
             string moduleRoot,
-            bool isLoadedDirectly = true) : 
+            bool isLoadedDirectly = true,
+            EnvironmentModuleInfo sourceModule = null) : 
             base(baseModule)
         {
             ModuleRoot = moduleRoot;
             IsLoadedDirectly = isLoadedDirectly;
+            SourceModule = sourceModule;
             pathInfos = new Dictionary<string, EnvironmentModulePathInfo>();
             Aliases = new Dictionary<string, EnvironmentModuleAliasInfo>();
             Functions = new Dictionary<string, EnvironmentModuleFunctionInfo>();
