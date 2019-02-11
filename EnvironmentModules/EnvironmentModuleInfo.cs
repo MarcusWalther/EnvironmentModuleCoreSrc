@@ -19,26 +19,6 @@
         public DirectoryInfo TmpDirectory { get; set; }
 
         /// <summary>
-        /// The short name of the module.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// The version of the application or library.
-        /// </summary>
-        public string Version { get; set; }
-
-        /// <summary>
-        /// The machine code of the module (e.g. x86, x64, arm...).
-        /// </summary>
-        public string Architecture { get; set; }
-
-        /// <summary>
-        /// Additional infos like compiler or compilation flags (e.g. MSVC15, gcc, ...).
-        /// </summary>
-        public string AdditionalInfo { get; set; }
-
-        /// <summary>
         /// All environment modules that must be loaded prior this module can be used.
         /// </summary>
         public DependencyInfo[] Dependencies { get; set; }
@@ -91,7 +71,7 @@
             string name,
             string version,
             string architecture,
-            string additionalInfo = "",
+            string additionalOptions = "",
             EnvironmentModuleType moduleType = EnvironmentModuleType.Default,
             DependencyInfo[] dependencies = null,
             SearchPath[] searchPaths = null,
@@ -99,14 +79,10 @@
             bool directUnload = false,
             double styleVersion = 0.0,
             string category = "",
-            Dictionary<string, string> parameters = null) : base(psModuleInfo, moduleType)
+            Dictionary<string, string> parameters = null) : base(psModuleInfo, name, version, architecture, additionalOptions, moduleType)
         {
             ModuleBase = moduleBase;
             TmpDirectory = tmpDirectory;
-            Name = name;
-            Version = version;
-            Architecture = architecture;
-            AdditionalInfo = additionalInfo;
 
             Dependencies = dependencies ?? new DependencyInfo[0];
             SearchPaths = searchPaths ?? new SearchPath[0];
@@ -118,6 +94,34 @@
             Parameters = parameters == null ? new Dictionary<string, string>() : parameters;
         }
 
+        public EnvironmentModuleInfo(
+            EnvironmentModuleInfoBase infoBase,
+            DirectoryInfo moduleBase,
+            DirectoryInfo tmpDirectory,
+            DependencyInfo[] dependencies = null,
+            SearchPath[] searchPaths = null,
+            string[] requiredFiles = null,
+            bool directUnload = false,
+            double styleVersion = 0.0,
+            string category = "",
+            Dictionary<string, string> parameters = null) :
+            this(infoBase.PSModuleInfo,
+                 moduleBase,
+                 tmpDirectory,
+                 infoBase.Name,
+                 infoBase.Version,
+                 infoBase.Architecture,
+                 infoBase.AdditionalOptions,
+                 infoBase.ModuleType,
+                 dependencies,
+                 searchPaths,
+                 requiredFiles,
+                 directUnload,
+                 styleVersion,
+                 category,
+                 parameters)
+        { }
+
         /// <summary>
         /// Copy constructor.
         /// </summary>
@@ -126,9 +130,10 @@
             this(other.PSModuleInfo,
                  other.ModuleBase,
                  other.TmpDirectory,
-                 other.Name, other.Version,
+                 other.Name,
+                 other.Version,
                  other.Architecture,
-                 other.AdditionalInfo,
+                 other.AdditionalOptions,
                  other.ModuleType,
                  other.Dependencies,
                  other.SearchPaths,
