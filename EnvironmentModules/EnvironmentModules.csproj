@@ -62,7 +62,6 @@
     <Compile Include="EnvironmentModulePathInfo.cs" />
     <Compile Include="EnvironmentModuleSearchPath.cs" />
     <Compile Include="ModuleCreator.cs" />
-    <Compile Include="NuSpecCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,16 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Management.Automation;
 
     public class EnvironmentModuleInfo : EnvironmentModuleInfoBase
     {
-        /// <summary>
-        /// The base directory of the environment module. Should be the same as for the underlaying 
-        /// PowerShell module.
-        /// </summary>
-        public DirectoryInfo ModuleBase { get; set; }
-
         /// <summary>
         /// The temporary directory that can be used to store files.
         /// </summary>
@@ -65,9 +58,9 @@
         public Dictionary<string, string> Parameters { get; set; }
 
         public EnvironmentModuleInfo(
-            PSModuleInfo psModuleInfo,
-            DirectoryInfo moduleBase,
+            DirectoryInfo baseDirectory,
             DirectoryInfo tmpDirectory,
+            string fullName,
             string name,
             string version,
             string architecture,
@@ -79,9 +72,8 @@
             bool directUnload = false,
             double styleVersion = 0.0,
             string category = "",
-            Dictionary<string, string> parameters = null) : base(psModuleInfo, name, version, architecture, additionalOptions, moduleType)
+            Dictionary<string, string> parameters = null) : base(fullName, baseDirectory, name, version, architecture, additionalOptions, moduleType)
         {
-            ModuleBase = moduleBase;
             TmpDirectory = tmpDirectory;
 
             Dependencies = dependencies ?? new DependencyInfo[0];
@@ -91,12 +83,11 @@
             DirectUnload = directUnload;
             StyleVersion = styleVersion;
             Category = category;
-            Parameters = parameters == null ? new Dictionary<string, string>() : parameters;
+            Parameters = parameters ?? new Dictionary<string, string>();
         }
 
         public EnvironmentModuleInfo(
             EnvironmentModuleInfoBase infoBase,
-            DirectoryInfo moduleBase,
             DirectoryInfo tmpDirectory,
             DependencyInfo[] dependencies = null,
             SearchPath[] searchPaths = null,
@@ -105,9 +96,9 @@
             double styleVersion = 0.0,
             string category = "",
             Dictionary<string, string> parameters = null) :
-            this(infoBase.PSModuleInfo,
-                 moduleBase,
+            this(infoBase.BaseDirectory,
                  tmpDirectory,
+                 infoBase.FullName,
                  infoBase.Name,
                  infoBase.Version,
                  infoBase.Architecture,
@@ -127,9 +118,9 @@
         /// </summary>
         /// <param name="other"></param>
         public EnvironmentModuleInfo(EnvironmentModuleInfo other) :
-            this(other.PSModuleInfo,
-                 other.ModuleBase,
+            this(other.BaseDirectory,
                  other.TmpDirectory,
+                 other.FullName,
                  other.Name,
                  other.Version,
                  other.Architecture,

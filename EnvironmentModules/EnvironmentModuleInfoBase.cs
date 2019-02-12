@@ -1,4 +1,4 @@
-﻿using System.Management.Automation;
+﻿using System.IO;
 
 namespace EnvironmentModules
 {
@@ -26,6 +26,12 @@ namespace EnvironmentModules
     /// </summary>
     public class EnvironmentModuleInfoBase
     {
+        /// <summary>
+        /// The base directory of the environment module. Should be the same as for the underlaying 
+        /// PowerShell module.
+        /// </summary>
+        public DirectoryInfo BaseDirectory { get; set; }
+
         /// <summary>
         /// The full name of the module. This name can be used to load the module with the help of the powershell-environment.
         /// </summary>
@@ -56,21 +62,17 @@ namespace EnvironmentModules
         /// </summary>
         public EnvironmentModuleType ModuleType { get; set; }
 
-        /// <summary>
-        /// The PS module info object associated to the environment module.
-        /// </summary>
-        public PSModuleInfo PSModuleInfo { get; set; }
-
-        public EnvironmentModuleInfoBase(PSModuleInfo psModuleInfo,
+        public EnvironmentModuleInfoBase(string fullName,
+            DirectoryInfo baseDirectory,
             string name,
             string version,
             string architecture,
             string additionalOptions = "",
             EnvironmentModuleType moduleType = EnvironmentModuleType.Default)
         {
-            FullName = psModuleInfo.Name;
+            FullName = fullName;
+            BaseDirectory = baseDirectory;
             ModuleType = moduleType;
-            PSModuleInfo = psModuleInfo;
             Name = name;
             Version = version;
             Architecture = architecture;
