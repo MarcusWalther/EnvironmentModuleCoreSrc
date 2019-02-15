@@ -9,7 +9,7 @@
         /// <summary>
         /// The temporary directory that can be used to store files.
         /// </summary>
-        public DirectoryInfo TmpDirectory { get; set; }
+        public string TmpDirectory { get; set; }
 
         /// <summary>
         /// All environment modules that must be loaded prior this module can be used.
@@ -58,8 +58,8 @@
         public Dictionary<string, string> Parameters { get; set; }
 
         public EnvironmentModuleInfo(
-            DirectoryInfo baseDirectory,
-            DirectoryInfo tmpDirectory,
+            string moduleBase,
+            string tmpDirectory,
             string fullName,
             string name,
             string version,
@@ -72,7 +72,7 @@
             bool directUnload = false,
             double styleVersion = 0.0,
             string category = "",
-            Dictionary<string, string> parameters = null) : base(fullName, baseDirectory, name, version, architecture, additionalOptions, moduleType)
+            Dictionary<string, string> parameters = null) : base(fullName, moduleBase, name, version, architecture, additionalOptions, moduleType)
         {
             TmpDirectory = tmpDirectory;
 
@@ -88,7 +88,7 @@
 
         public EnvironmentModuleInfo(
             EnvironmentModuleInfoBase infoBase,
-            DirectoryInfo tmpDirectory,
+            string tmpDirectory,
             DependencyInfo[] dependencies = null,
             SearchPath[] searchPaths = null,
             string[] requiredFiles = null,
@@ -96,7 +96,7 @@
             double styleVersion = 0.0,
             string category = "",
             Dictionary<string, string> parameters = null) :
-            this(infoBase.BaseDirectory,
+            this(infoBase.ModuleBase,
                  tmpDirectory,
                  infoBase.FullName,
                  infoBase.Name,
@@ -118,7 +118,7 @@
         /// </summary>
         /// <param name="other"></param>
         public EnvironmentModuleInfo(EnvironmentModuleInfo other) :
-            this(other.BaseDirectory,
+            this(other.ModuleBase,
                  other.TmpDirectory,
                  other.FullName,
                  other.Name,

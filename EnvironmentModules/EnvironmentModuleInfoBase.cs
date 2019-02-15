@@ -30,7 +30,7 @@ namespace EnvironmentModules
         /// The base directory of the environment module. Should be the same as for the underlaying 
         /// PowerShell module.
         /// </summary>
-        public DirectoryInfo BaseDirectory { get; set; }
+        public string ModuleBase { get; set; }
 
         /// <summary>
         /// The full name of the module. This name can be used to load the module with the help of the powershell-environment.
@@ -63,7 +63,7 @@ namespace EnvironmentModules
         public EnvironmentModuleType ModuleType { get; set; }
 
         public EnvironmentModuleInfoBase(string fullName,
-            DirectoryInfo baseDirectory,
+            string moduleBase,
             string name,
             string version,
             string architecture,
@@ -71,7 +71,7 @@ namespace EnvironmentModules
             EnvironmentModuleType moduleType = EnvironmentModuleType.Default)
         {
             FullName = fullName;
-            BaseDirectory = baseDirectory;
+            ModuleBase = moduleBase;
             ModuleType = moduleType;
             Name = name;
             Version = version;
