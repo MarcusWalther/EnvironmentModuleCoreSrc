@@ -9,10 +9,6 @@
 
         #region Properties
         /// <summary>
-        /// The path to the root directory of the module.
-        /// </summary>
-        public string ModuleRoot { get; private set; }
-        /// <summary>
         /// A reference counter indicating that is decreased when the module is removed and increased when loaded.
         /// </summary>
         public int ReferenceCounter { get; set; }
@@ -60,12 +56,10 @@
         #region Constructors
         public EnvironmentModule(
             EnvironmentModuleInfo baseModule,
-            string moduleRoot,
             bool isLoadedDirectly = true,
             EnvironmentModuleInfo sourceModule = null) : 
             base(baseModule)
         {
-            ModuleRoot = moduleRoot;
             IsLoadedDirectly = isLoadedDirectly;
             SourceModule = sourceModule;
             pathInfos = new Dictionary<string, EnvironmentModulePathInfo>();

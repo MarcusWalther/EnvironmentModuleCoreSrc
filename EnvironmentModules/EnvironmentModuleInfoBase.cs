@@ -30,32 +30,32 @@ namespace EnvironmentModules
         /// The base directory of the environment module. Should be the same as for the underlaying 
         /// PowerShell module.
         /// </summary>
-        public string ModuleBase { get; set; }
+        public string ModuleBase { get; protected set; }
 
         /// <summary>
         /// The full name of the module. This name can be used to load the module with the help of the powershell-environment.
         /// </summary>
-        public string FullName { get; set; }
+        public string FullName { get; protected set; }
 
         /// <summary>
         /// The short name of the module.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; protected set; }
 
         /// <summary>
         /// The version of the application or library.
         /// </summary>
-        public string Version { get; set; }
+        public string Version { get; protected set; }
 
         /// <summary>
         /// The machine code of the module (e.g. x86, x64, arm...).
         /// </summary>
-        public string Architecture { get; set; }
+        public string Architecture { get; protected set; }
 
         /// <summary>
         /// Additional infos like compiler or compilation flags (e.g. MSVC15, gcc, ...).
         /// </summary>
-        public string AdditionalOptions { get; set; }
+        public string AdditionalOptions { get; protected set; }
 
         /// <summary>
         /// Specifies the type of the module.
@@ -67,8 +67,8 @@ namespace EnvironmentModules
             string name,
             string version,
             string architecture,
-            string additionalOptions = "",
-            EnvironmentModuleType moduleType = EnvironmentModuleType.Default)
+            string additionalOptions,
+            EnvironmentModuleType moduleType)
         {
             FullName = fullName;
             ModuleBase = moduleBase;

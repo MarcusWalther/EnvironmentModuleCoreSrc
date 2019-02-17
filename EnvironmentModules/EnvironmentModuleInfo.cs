@@ -2,10 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
 
     public class EnvironmentModuleInfo : EnvironmentModuleInfoBase
     {
+        /// <summary>
+        /// The root directory of the environment module. Can be null.
+        /// </summary>
+        public string ModuleRoot { get; set; }
+
         /// <summary>
         /// The temporary directory that can be used to store files.
         /// </summary>
@@ -59,58 +63,41 @@
 
         public EnvironmentModuleInfo(
             string moduleBase,
+            string moduleRoot,
             string tmpDirectory,
             string fullName,
             string name,
             string version,
             string architecture,
-            string additionalOptions = "",
-            EnvironmentModuleType moduleType = EnvironmentModuleType.Default,
-            DependencyInfo[] dependencies = null,
-            SearchPath[] searchPaths = null,
-            string[] requiredFiles = null,
-            bool directUnload = false,
-            double styleVersion = 0.0,
-            string category = "",
-            Dictionary<string, string> parameters = null) : base(fullName, moduleBase, name, version, architecture, additionalOptions, moduleType)
+            string additionalOptions,
+            EnvironmentModuleType moduleType = EnvironmentModuleType.Default) : base(fullName, moduleBase, name, version, architecture, additionalOptions, moduleType)
         {
+            ModuleRoot = moduleRoot;
             TmpDirectory = tmpDirectory;
 
-            Dependencies = dependencies ?? new DependencyInfo[0];
-            SearchPaths = searchPaths ?? new SearchPath[0];
-            RequiredFiles = requiredFiles ?? new string[0];
+            Dependencies = new DependencyInfo[0];
+            SearchPaths = new SearchPath[0];
+            RequiredFiles = new string[0];
 
-            DirectUnload = directUnload;
-            StyleVersion = styleVersion;
-            Category = category;
-            Parameters = parameters ?? new Dictionary<string, string>();
+            DirectUnload = false;
+            StyleVersion = 1.0;
+            Category = "";
+            Parameters = new Dictionary<string, string>();
         }
 
         public EnvironmentModuleInfo(
             EnvironmentModuleInfoBase infoBase,
-            string tmpDirectory,
-            DependencyInfo[] dependencies = null,
-            SearchPath[] searchPaths = null,
-            string[] requiredFiles = null,
-            bool directUnload = false,
-            double styleVersion = 0.0,
-            string category = "",
-            Dictionary<string, string> parameters = null) :
+            string moduleRoot,
+            string tmpDirectory) :
             this(infoBase.ModuleBase,
+                 moduleRoot,
                  tmpDirectory,
                  infoBase.FullName,
                  infoBase.Name,
                  infoBase.Version,
                  infoBase.Architecture,
                  infoBase.AdditionalOptions,
-                 infoBase.ModuleType,
-                 dependencies,
-                 searchPaths,
-                 requiredFiles,
-                 directUnload,
-                 styleVersion,
-                 category,
-                 parameters)
+                 infoBase.ModuleType)
         { }
 
         /// <summary>
@@ -119,20 +106,22 @@
         /// <param name="other"></param>
         public EnvironmentModuleInfo(EnvironmentModuleInfo other) :
             this(other.ModuleBase,
+                other.ModuleRoot,
                  other.TmpDirectory,
                  other.FullName,
                  other.Name,
                  other.Version,
                  other.Architecture,
                  other.AdditionalOptions,
-                 other.ModuleType,
-                 other.Dependencies,
-                 other.SearchPaths,
-                 other.RequiredFiles,
-                 other.DirectUnload,
-                 other.StyleVersion,
-                 other.Category,
-                 other.Parameters)
-        { }
+                 other.ModuleType)
+        {
+            Dependencies = other.Dependencies;
+            SearchPaths = other.SearchPaths;
+            RequiredFiles = other.RequiredFiles;
+            DirectUnload = other.DirectUnload;
+            StyleVersion = other.StyleVersion;
+            Category = other.Category;
+            Parameters = other.Parameters;
+        }
     }
 }
