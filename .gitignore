@@ -1,1 +1,8 @@
-/.vs/
+.vs/
+*.pdb
+*.dll
+*.Cache
+*.user
+bin/
+obj/
+*.pubxml

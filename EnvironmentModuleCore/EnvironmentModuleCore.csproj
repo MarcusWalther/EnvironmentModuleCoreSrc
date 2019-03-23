@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Marcus Walther</Authors>
+    <Company />
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <Version>3.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\EnvironmentModuleCore\Templates\EnvironmentModule.nuspec.template" Link="EnvironmentModule.nuspec.template" />
+    <None Include="..\..\EnvironmentModuleCore\Templates\EnvironmentModule.psd1.template" Link="EnvironmentModule.psd1.template" />
+    <None Include="..\..\EnvironmentModuleCore\Templates\EnvironmentModule.pse1.template" Link="EnvironmentModule.pse1.template" />
+    <None Include="..\..\EnvironmentModuleCore\Templates\EnvironmentModule.psm1.template" Link="EnvironmentModule.psm1.template" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scriban" Version="2.0.0" />
+  </ItemGroup>
+
+</Project>

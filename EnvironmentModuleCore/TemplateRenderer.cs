@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿// <copyright file="TemplateRenderer.cs">
+//     Copyright 2019 Marcus Walther
+// </copyright>
+// <author>Marcus Walther</author>
 
-using DotLiquid;
-
-namespace EnvironmentModules
+namespace EnvironmentModuleCore
 {
+    using System.Collections.Generic;
+    using System.IO;
+
+    using Scriban;
+
     public class TemplateRenderer
     {
         internal static void CreateConcreteFilesFromTemplates(object modelDefinition, Dictionary<string, string> templateFiles)
@@ -21,27 +26,20 @@ namespace EnvironmentModules
 
             if (!templateFileInfo.Exists)
             {
-                throw new EnvironmentModuleException($"The template file '{templateFileInfo.FullName}' does not exist");
+                throw new ModuleException($"The template file '{templateFileInfo.FullName}' does not exist");
             }
 
             string templateContent = File.ReadAllText(templateFile);
             Template template = Template.Parse(templateContent);
-            string concreteContent = template.Render(Hash.FromAnonymousObject(modelDefinition));
+            string concreteContent = template.Render(modelDefinition, memberRenamer: member => member.Name);
             File.WriteAllText(targetFile, concreteContent);
         }
 
         public static void CreateConcreteFileFromTemplate(IDictionary<string, object> modelDefinition, string templateFile, string targetFile)
         {
-            FileInfo templateFileInfo = new FileInfo(templateFile);
-
-            if (!templateFileInfo.Exists)
-            {
-                throw new EnvironmentModuleException($"The template file '{templateFileInfo.FullName}' does not exist");
-            }
-
             string templateContent = File.ReadAllText(templateFile);
             Template template = Template.Parse(templateContent);
-            string concreteContent = template.Render(Hash.FromDictionary(modelDefinition));
+            string concreteContent = template.Render(modelDefinition, memberRenamer: member => member.Name);
             File.WriteAllText(targetFile, concreteContent);
         }
     }
