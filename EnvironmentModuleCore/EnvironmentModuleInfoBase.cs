@@ -91,7 +91,7 @@ namespace EnvironmentModuleCore
         public EnvironmentModuleType ModuleType { get; set; }
 
         /// <summary>
-        /// Gets or sets the short name of the module.
+        /// Gets the short name of the module.
         /// </summary>
         public string Name { get; }
 
