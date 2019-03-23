@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>EnvironmentModuleCore</id>
+    <version>3.0.0</version>
+    <authors>Marcus Walther</authors>
+    <owners>Marcus Walther</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/</projectUrl>
+    <iconUrl>https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/blob/master/Icon.png?raw=true</iconUrl>
+    <description>This library is necessary in order to use the EnvironmentModuleCore Powershell Module.</description>
+    <tags>Powershell</tags>
+    <repository type="Github" url="https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Scriban" version="2.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\netstandard2.0\EnvironmentModuleCore.dll" target="lib\netstandard2.0\" />
+  </files>
+</package>

@@ -2,18 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Marcus Walther</Authors>
+    <Authors></Authors>
     <Company />
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <FileVersion>3.0.0.0</FileVersion>
     <Version>3.0.0</Version>
-    <PackageProjectUrl>https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/LICENSE</PackageLicenseUrl>
-    <PackageIconUrl>https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/blob/Icon.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/</RepositoryUrl>
-    <RepositoryType>Github</RepositoryType>
-    <PackageTags>Powershell</PackageTags>
-    <Description>This library is necessary in order to use the EnvironmentModuleCore Powershell Module.</Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageIconUrl></PackageIconUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <PackageTags></PackageTags>
+    <Description></Description>
+    <Product />
   </PropertyGroup>
 
   <ItemGroup>
