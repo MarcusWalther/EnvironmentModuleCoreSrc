@@ -8,5 +8,7 @@
 # Build
 The project is written in C#, based on .Net Core 2.1. It was developed using Visual Studio 2017. In order to build it, load the solution file into Visual Studio and compile it. The file *EnvironmentModuleCore.nuspec* can be used to create a nuget package.
 
-# Referenced Libraries
-Scriban (see https://github.com/lunet-io/scriban) - BSD 2-Clause "Simplified" License.
+# References
+* Library -- Scriban (see https://github.com/lunet-io/scriban) - BSD 2-Clause "Simplified" License.
+* Idea -- Environment Modules on Linux Systems (see http://modules.sourceforge.net)
+* Icon -- Adaption of Powershell Icon (see https://de.wikipedia.org/wiki/Datei:PowerShell_5.0_icon.png)
