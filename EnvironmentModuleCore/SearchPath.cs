@@ -31,7 +31,7 @@ namespace EnvironmentModuleCore
         /// Initializes a new instance of the SearchPath class by copying the values from the passed object.
         /// </summary>
         /// <param name="other">The object that is used as data source for the copy operation.</param>
-        public SearchPath(SearchPath other) : this(other.Key, other.Type, other.Priority, other.SubFolder, other.IsDefault)
+        public SearchPath(SearchPath other) : this(other.Key, other.Type, other.Priority, other.SubFolder, other.IsDefault, other.IsTemporary)
         {
         }
 
@@ -43,13 +43,15 @@ namespace EnvironmentModuleCore
         /// <param name="priority">The priority. A higher value means a higher priority.</param>
         /// <param name="subFolder">The subfolder to consider in the path that was identified by the key.</param>
         /// <param name="isDefault">True if the value is a default value specified by the description files.</param>
-        public SearchPath(string key, string type, int priority, string subFolder, bool isDefault)
+        /// <param name="isTemporary">True if the search path is temporary for the session.</param>
+        public SearchPath(string key, string type, int priority, string subFolder, bool isDefault, bool isTemporary = false)
         {
             Key = key;
             Type = type;
             Priority = priority;
             SubFolder = subFolder;
             IsDefault = isDefault;
+            IsTemporary = isTemporary;
         }
 
         #region Properties
@@ -81,7 +83,13 @@ namespace EnvironmentModuleCore
         /// Gets or sets the subfolder that should be considered for the search.
         /// </summary>
         [DataMember]
-        public string SubFolder { get; set; } 
+        public string SubFolder { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the search path is temporary for the session or not.
+        /// </summary>
+        [DataMember]
+        public bool IsTemporary { get; set; }
         #endregion
 
         /// <summary>
