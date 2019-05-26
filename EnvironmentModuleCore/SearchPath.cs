@@ -31,7 +31,7 @@ namespace EnvironmentModuleCore
         /// Initializes a new instance of the SearchPath class by copying the values from the passed object.
         /// </summary>
         /// <param name="other">The object that is used as data source for the copy operation.</param>
-        public SearchPath(SearchPath other) : this(other.Key, other.Type, other.Priority, other.SubFolder, other.IsDefault, other.IsTemporary)
+        public SearchPath(SearchPath other) : this(other.Key, other.Type, other.Priority, other.SubFolder, other.IsDefault, other.IsTemporary, other.IsGlobal)
         {
         }
 
@@ -44,7 +44,8 @@ namespace EnvironmentModuleCore
         /// <param name="subFolder">The subfolder to consider in the path that was identified by the key.</param>
         /// <param name="isDefault">True if the value is a default value specified by the description files.</param>
         /// <param name="isTemporary">True if the search path is temporary for the session.</param>
-        public SearchPath(string key, string type, int priority, string subFolder, bool isDefault, bool isTemporary = false)
+        /// /// <param name="isGlobal">True if the search path is stored globally for all users.</param>
+        public SearchPath(string key, string type, int priority, string subFolder, bool isDefault, bool isTemporary = false, bool isGlobal = false)
         {
             Key = key;
             Type = type;
@@ -52,6 +53,7 @@ namespace EnvironmentModuleCore
             SubFolder = subFolder;
             IsDefault = isDefault;
             IsTemporary = isTemporary;
+            IsGlobal = isGlobal;
         }
 
         #region Properties
@@ -90,6 +92,12 @@ namespace EnvironmentModuleCore
         /// </summary>
         [DataMember]
         public bool IsTemporary { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the search path is part of the global storage or not (otherwise it is local).
+        /// </summary>
+        [DataMember]
+        public bool IsGlobal { get; set; }
         #endregion
 
         /// <summary>
