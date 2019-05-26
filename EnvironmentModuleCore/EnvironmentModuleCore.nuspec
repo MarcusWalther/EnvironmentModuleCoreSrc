@@ -2,7 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>EnvironmentModuleCore</id>
-    <version>3.0.0</version>
+    <title>Environment Module Core</title>
+    <version>3.1.0</version>
     <authors>Marcus Walther</authors>
     <owners>Marcus Walther</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,6 +13,7 @@
     <description>This library is necessary in order to use the EnvironmentModuleCore Powershell Module.</description>
     <tags>Powershell</tags>
     <repository type="Github" url="https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/" />
+    <releaseNotes>Added support for temporary and global search paths.</releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Scriban" version="2.0.0" exclude="Build,Analyzers" />
