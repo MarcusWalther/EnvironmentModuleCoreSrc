@@ -173,7 +173,10 @@ namespace EnvironmentModuleCore
             }
             else
             {
-                info.Values.Add(value);
+                if (pathType == PathType.SET)
+                    info.Values[0] = value;
+                else
+                    info.Values.Add(value);
             }
 
             pathInfos[key] = info;

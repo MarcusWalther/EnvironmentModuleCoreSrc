@@ -4,9 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors></Authors>
     <Company />
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
-    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.1.0</AssemblyVersion>
+    <FileVersion>3.1.1.0</FileVersion>
+    <Version>3.1.1</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl></PackageIconUrl>
