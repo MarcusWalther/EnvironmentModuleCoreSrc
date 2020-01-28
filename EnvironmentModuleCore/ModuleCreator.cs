@@ -8,7 +8,6 @@ namespace EnvironmentModuleCore
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
 
     /// <summary>
     /// This helper class can be used to create new environment modules.
@@ -23,16 +22,16 @@ namespace EnvironmentModuleCore
         /// <param name="storageDirectory">The directory to store the created module files.</param>
         /// <param name="workingDirectory">The working directory containing the template folder and template files.</param>
         /// <param name="directUnload">True if the module should be marked with the flag "direct unload".</param>
-        /// <param name="additionalDescription">An additional description for the module.</param>
-        /// <param name="additionalEnvironmentModules">Additional environment modules that must be loaded as dependencies.</param>
+        /// <param name="description">The description for the module.</param>
+        /// <param name="dependencies">Additional environment modules that must be loaded as dependencies.</param>
         // ReSharper disable once UnusedMember.Global
         public static void CreateMetaEnvironmentModule(
             string name, 
             string storageDirectory,
             string workingDirectory, 
             bool directUnload, 
-            string additionalDescription,
-            string[] additionalEnvironmentModules)
+            string description,
+            DependencyInfo[] dependencies = null)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -49,9 +48,9 @@ namespace EnvironmentModuleCore
                 throw new ModuleException($"The given working directory '{workingDirectory}' does not exist");
             }
 
-            if (additionalEnvironmentModules == null)
+            if (dependencies == null)
             {
-                additionalEnvironmentModules = new string[] { };
+                dependencies = new DependencyInfo[] { };
             }
 
             var modelDefinition = new
@@ -62,19 +61,19 @@ namespace EnvironmentModuleCore
                 DateTime.Now.Year,
                 Date            = DateTime.Now.ToString("dd/MM/yyyy"),
                 Guid            = Guid.NewGuid(),
-                ModuleRoot      = "\".\\\"",
+                SearchPaths = new SearchPath[]{},
+                RequiredItems = new RequiredItem[] {},
                 RequiredModules = "\"EnvironmentModuleCore\"",
-                Dependencies = additionalEnvironmentModules.Length > 0 ? additionalEnvironmentModules.Select(x => "\"x\"").Aggregate((a, b) => a + "," + b) : string.Empty,
+                Dependencies = dependencies,
                 CustomCode      = string.Empty,
-                AdditionalDescription = additionalDescription,
+                Description = description,
                 DirectUnload    = $"${directUnload}",
                 ModuleType      = EnvironmentModuleType.Meta.ToString(),
-                Category        = string.Empty,
                 Parameters      = new Dictionary<string, string>()
             };
 
             FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psd1.template"));
-            FileInfo templatePsm = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psm1.template"));
+            FileInfo templatePsm = new FileInfo(Path.Combine(workingDirectory, "Templates\\MetaEnvironmentModule.psm1.template"));
             FileInfo templatePse = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.pse1.template"));
 
             CreateModuleFromTemplates(modelDefinition, templatePsd, templatePsm, templatePse, storageDirectory, name, null, null);
@@ -88,11 +87,12 @@ namespace EnvironmentModuleCore
         /// <param name="description">The description of the module.</param>
         /// <param name="workingDirectory">The working directory containing the template folder and template files.</param>
         /// <param name="author">The author of the module</param>
+        /// <param name="company">The company of the module</param>
         /// <param name="version">The version of the module.</param>
         /// <param name="architecture">The architecture of the module.</param>
-        /// <param name="executable">The path to the executable of the module.</param>
+        /// <param name="requiredItems">The items that are required by the module.</param>
+        /// <param name="defaultSearchPaths">The default search paths to consider for the mounting process.</param>
         /// <param name="dependencies">The dependencies of the environment module.</param>
-        /// <param name="category">The category of the environment module.</param>
         /// <param name="parameters">The parameters as key value pairs.</param>
         // ReSharper disable once UnusedMember.Global
         public static void CreateEnvironmentModule(
@@ -101,11 +101,12 @@ namespace EnvironmentModuleCore
             string description,
             string workingDirectory = null,
             string author = null,
+            string company = null,
             string version = null,
             string architecture = null,
-            string executable = null,
+            RequiredItem[] requiredItems = null,
+            SearchPath[] defaultSearchPaths = null,
             DependencyInfo[] dependencies = null,
-            string category = null,
             Dictionary<string, string> parameters = null)
         {
             if (string.IsNullOrEmpty(name))
@@ -128,6 +129,11 @@ namespace EnvironmentModuleCore
                 author = string.Empty;
             }
 
+            if (string.IsNullOrEmpty(company))
+            {
+                company = string.Empty;
+            }
+
             if (string.IsNullOrEmpty(description))
             {
                 description = string.Empty;
@@ -138,49 +144,28 @@ namespace EnvironmentModuleCore
                 dependencies = new DependencyInfo[] { };
             }
 
-            if (string.IsNullOrEmpty(category))
-            {
-                category = string.Empty;
-            }
-
             if (parameters == null)
             {
                 parameters = new Dictionary<string, string>();
             }
 
-            FileInfo executableFile;
-            if (!string.IsNullOrEmpty(executable))
-            {
-                executableFile = new FileInfo(executable);
-                if (!executableFile.Exists)
-                {
-                    throw new ModuleException("The executable does not exist");
-                }
-            }
-            else
-            {
-                throw new ModuleException("No executable given");
-            }
-
             var modelDefinition = new
             {
                 Author = author,
-                CompanyName = string.Empty,
+                CompanyName = company,
                 Name = name,
                 Version = version,
                 DateTime.Now.Year,
                 Date = DateTime.Now.ToString("dd/MM/yyyy"),
                 Guid = Guid.NewGuid(),
-                // ReSharper disable once PossibleNullReferenceException
-                ModuleRoot = executableFile.Directory.FullName,
-                FileName = executableFile.Name,
+                SearchPaths = defaultSearchPaths,
+                RequiredItems = requiredItems,
                 RequiredModules = "\"EnvironmentModuleCore\"",
-                Dependencies = dependencies.Length > 0 ? dependencies.Select(x => $"@{{Name=\"{x.ModuleFullName}\"; Optional=${x.IsOptional.ToString()}}}").Aggregate((a, b) => a + "," + b) : string.Empty,
-                AdditionalDescription = description,
+                Dependencies = dependencies,
+                Description = description,
                 CustomCode = string.Empty,
                 DirectUnload = "$false",
                 ModuleType = EnvironmentModuleType.Default.ToString(),
-                Category = category,
                 Parameters = parameters
             }; 
 

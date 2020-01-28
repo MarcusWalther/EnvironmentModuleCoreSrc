@@ -22,6 +22,7 @@
     <None Include="..\..\EnvironmentModuleCore\Templates\EnvironmentModule.psd1.template" Link="EnvironmentModule.psd1.template" />
     <None Include="..\..\EnvironmentModuleCore\Templates\EnvironmentModule.pse1.template" Link="EnvironmentModule.pse1.template" />
     <None Include="..\..\EnvironmentModuleCore\Templates\EnvironmentModule.psm1.template" Link="EnvironmentModule.psm1.template" />
+    <None Include="..\..\EnvironmentModuleCore\Templates\MetaEnvironmentModule.psm1.template" Link="MetaEnvironmentModule.psm1.template" />
   </ItemGroup>
 
   <ItemGroup>
