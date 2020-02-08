@@ -18,11 +18,13 @@ namespace EnvironmentModuleCore
         /// <param name="name">The name of the parameter.</param>
         /// <param name="moduleFullName">The module providing the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
-        public ParameterInfo(string name, string moduleFullName, string value)
+        /// <param name="isUserDefined">True if the value was defined manually by the user.</param>
+        public ParameterInfo(string name, string moduleFullName, string value, bool isUserDefined)
         {
             Name = name;
             ModuleFullName = moduleFullName;
             Value = value;
+            IsUserDefined = isUserDefined;
         } 
         #endregion
 
@@ -33,14 +35,19 @@ namespace EnvironmentModuleCore
         public string Name { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the module name that has defined the value of the parameter. An empty string indicates that the user has changed the parameter.
+        /// Gets or sets the module name that has defined the value of the parameter.
         /// </summary>
         public string ModuleFullName { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the parameter.
         /// </summary>
-        public string Value { get; set; } 
+        public string Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the values was defined manually by the user or not.
+        /// </summary>
+        public bool IsUserDefined { get; set; }
         #endregion
     }
 }
