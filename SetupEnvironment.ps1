@@ -8,7 +8,7 @@ param(
     $Scope = "CurrentUser"
 )
 
-[ModuleSpecification[]] $RequiredModules = @(@{ModuleName = "InvokeBuild"})
+[ModuleSpecification[]] $RequiredModules = @([Microsoft.PowerShell.Commands.ModuleSpecification]::new("InvokeBuild"))
 $Policy = (Get-PSRepository PSGallery).InstallationPolicy
 Set-PSRepository PSGallery -InstallationPolicy Trusted
 
