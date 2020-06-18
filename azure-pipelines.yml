@@ -1,0 +1,12 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- pwsh: .\SetupEnvironment.ps1
+  displayName: 'Setup the environment'
+
+- pwsh: Invoke-Build Build
+  displayName: 'Build the library'
