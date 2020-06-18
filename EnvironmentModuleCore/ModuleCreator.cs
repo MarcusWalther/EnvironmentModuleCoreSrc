@@ -72,9 +72,9 @@ namespace EnvironmentModuleCore
                 Parameters      = new Dictionary<string, string>()
             };
 
-            FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psd1.template"));
-            FileInfo templatePsm = new FileInfo(Path.Combine(workingDirectory, "Templates\\MetaEnvironmentModule.psm1.template"));
-            FileInfo templatePse = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.pse1.template"));
+            FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates", "EnvironmentModule.psd1.template"));
+            FileInfo templatePsm = new FileInfo(Path.Combine(workingDirectory, "Templates", "MetaEnvironmentModule.psm1.template"));
+            FileInfo templatePse = new FileInfo(Path.Combine(workingDirectory, "Templates", "EnvironmentModule.pse1.template"));
 
             CreateModuleFromTemplates(modelDefinition, templatePsd, templatePsm, templatePse, storageDirectory, name, null, null);
         }
@@ -169,9 +169,9 @@ namespace EnvironmentModuleCore
                 Parameters = parameters
             }; 
 
-            FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psd1.template"));
-            FileInfo templatePsm = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.psm1.template"));
-            FileInfo templatePse = new FileInfo(Path.Combine(workingDirectory, "Templates\\EnvironmentModule.pse1.template"));
+            FileInfo templatePsd = new FileInfo(Path.Combine(workingDirectory, "Templates", "EnvironmentModule.psd1.template"));
+            FileInfo templatePsm = new FileInfo(Path.Combine(workingDirectory, "Templates", "EnvironmentModule.psm1.template"));
+            FileInfo templatePse = new FileInfo(Path.Combine(workingDirectory, "Templates", "EnvironmentModule.pse1.template"));
 
             CreateModuleFromTemplates(modelDefinition, templatePsd, templatePsm, templatePse, storageDirectory, name, version, architecture);
         }

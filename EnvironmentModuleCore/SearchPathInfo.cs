@@ -3,6 +3,8 @@
 // </copyright>
 // <author>Marcus Walther</author>
 
+using System.IO;
+
 namespace EnvironmentModuleCore
 {
     /// <summary>
@@ -31,7 +33,7 @@ namespace EnvironmentModuleCore
         /// <returns>The human readable string.</returns>
         public override string ToString()
         {
-            string subPath = string.IsNullOrEmpty(SubFolder) ? string.Empty : $" \\ {SubFolder}";
+            string subPath = string.IsNullOrEmpty(SubFolder) ? string.Empty : $" {Path.DirectorySeparatorChar} {SubFolder}";
             return $"{Module} -- {Type}: {Key}{subPath} (Priority: {Priority}, Default: {IsDefault})";
         }
     }
