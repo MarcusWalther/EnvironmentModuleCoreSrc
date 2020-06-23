@@ -19,5 +19,5 @@ steps:
 
 - task: NuGetAuthenticate@0
 
-- pwsh: Invoke-Build Deploy -NugetSource EnvironmentModuleCoreSrc_Feed -NugetApiKey AzureArtifacts
+- pwsh: Invoke-Build Deploy -NugetSource "EnvironmentModuleCoreSrc_Feed" -NugetApiKey AzureArtifacts
   displayName: 'Deploy the package'
