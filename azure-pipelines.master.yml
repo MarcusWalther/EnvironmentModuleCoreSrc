@@ -1,0 +1,18 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- pwsh: .\SetupEnvironment.ps1
+  displayName: 'Setup the environment'
+
+- pwsh: Invoke-Build Build
+  displayName: 'Build the library'
+
+- pwsh: Invoke-Build Pack
+  displayName: 'Pack the build'
+
+- pwsh: Invoke-Build Deploy -NugetSource "https://api.nuget.org/v3/index.json" -NugetApiKey $(NugetApiKey)
+  displayName: 'Deploy the package'
