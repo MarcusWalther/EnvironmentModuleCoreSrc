@@ -29,5 +29,5 @@ task Pack {
 }
 
 task Deploy {
-    dotnet nuget push --source "$NugetSource" --api-key "$NugetApiKey" "Package\*.nupkg"
+    Get-ChildItem "Package/*.nupkg" | ForEach-Object {dotnet nuget push --source "$NugetSource" --api-key "$NugetApiKey" "$($_.FullName)"}
 }
