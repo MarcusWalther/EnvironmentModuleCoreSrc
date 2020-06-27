@@ -1,0 +1,24 @@
+trigger:
+- develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables: 
+  suffix: '$(Build.BuildNumber)'
+  nugetSource: 'https://pkgs.dev.azure.com/MarcusWalther/_packaging/Feed_EnvironmentModuleCore/nuget/v3/index.json'
+
+steps:
+- pwsh: .\SetupEnvironment.ps1
+  displayName: 'Setup the environment'
+
+- pwsh: Invoke-Build Build -Suffix $(suffix)
+  displayName: 'Build the library'
+
+- pwsh: Invoke-Build Pack -Suffix $(suffix)
+  displayName: 'Pack the build'
+
+- task: NuGetAuthenticate@0
+
+- pwsh: Invoke-Build Deploy -NugetSource "$(nugetSource)" -NugetApiKey AzureArtifacts
+  displayName: 'Deploy the package'
