@@ -6,7 +6,7 @@ pool:
 
 variables: 
   suffix: '$(Build.BuildNumber)'
-  nugetSource: 'https://marcuswalther.pkgs.visualstudio.com/EnvironmentModuleCoreSrc/_packaging/Feed_EnvironmentModuleCoreSrc/nuget/v3/index.json'
+  nugetSource: 'https://pkgs.dev.azure.com/MarcusWalther/_packaging/Feed_EnvironmentModuleCore/nuget/v3/index.json'
 
 steps:
 - pwsh: .\SetupEnvironment.ps1
