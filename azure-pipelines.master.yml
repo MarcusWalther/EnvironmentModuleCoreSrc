@@ -20,7 +20,7 @@ steps:
 
 - task: NuGetAuthenticate@0
 
-- pwsh: Invoke-Build Deploy -NugetSource "$(nugetSource)" -NugetApiKey $(env:ENV_NUGET_APIKEY)
+- pwsh: Invoke-Build Deploy -NugetSource "$(nugetSource)" -NugetApiKey $env:ENV_NUGET_APIKEY
   displayName: 'Deploy the package'
   env:
     ENV_NUGET_APIKEY: $(NUGET_APIKEY)
