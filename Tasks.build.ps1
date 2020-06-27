@@ -1,6 +1,6 @@
 param(
     $Configuration = 'Release',
-    $Suffix = $null,
+    $Suffix = "local",
     $NugetSource = $null,
     $NugetApiKey = $null
 )
@@ -10,7 +10,12 @@ task Prepare {
 }
 
 task Build Prepare, {
-    dotnet build (Join-Path "$PSScriptRoot" "EnvironmentModuleCore.sln") -c "$Configuration" --version-suffix "$Suffix"
+    $cmdArguments = "build", "`"$(Join-Path `"$PSScriptRoot`" EnvironmentModuleCore.sln)`"", "-c", "$Configuration"
+    if(-not [string]::IsNullOrEmpty($Suffix)) {
+        $cmdArguments += "--version-suffix", "$Suffix"
+    }
+
+    dotnet $cmdArguments
 }
 
 task Pack {
@@ -19,13 +24,12 @@ task Pack {
     }
 
     $projectFile = $(Join-Path "$PSScriptRoot" (Join-Path "EnvironmentModuleCore" "EnvironmentModuleCore.csproj"))
+    $cmdArguments = "pack", "$projectFile", "--no-build", "-c", "$Configuration", "-o", "Package"
+    if(-not [string]::IsNullOrEmpty($Suffix)) {
+        $cmdArguments += "--version-suffix", "$Suffix"
+    }
 
-    if([string]::IsNullOrEmpty($Suffix)) {
-        dotnet pack $projectFile --no-build -c "$Configuration" -o "Package"
-    }
-    else {
-        dotnet pack $projectFile --no-build -c "$Configuration" -o "Package" --version-suffix "$Suffix"
-    }
+    dotnet $cmdArguments
 }
 
 task Deploy {

@@ -4,9 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Marcus Walther</Authors>
     <Company />
-	<VersionPrefix>3.2.0</VersionPrefix>
-    <AssemblyVersion>3.3.0.0</AssemblyVersion>
-    <FileVersion>3.3.0.0</FileVersion>
     <PackageProjectUrl>https://github.com/MarcusWalther/EnvironmentModuleCoreSrc/</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageIconUrl></PackageIconUrl>
@@ -15,8 +12,9 @@
     <PackageTags>Powershell</PackageTags>
     <Description></Description>
     <Product />
-    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <Version>3.3.0</Version>
+    <VersionSuffix>local</VersionSuffix>
+    <Version>3.3.0.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

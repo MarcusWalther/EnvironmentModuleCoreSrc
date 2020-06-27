@@ -4,15 +4,21 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  suffix: ''
+  nugetSource: 'https://marcuswalther.pkgs.visualstudio.com/EnvironmentModuleCoreSrc/_packaging/EnvironmentModuleCoreSrc_Feed/nuget/v3/index.json'
+
 steps:
 - pwsh: .\SetupEnvironment.ps1
   displayName: 'Setup the environment'
 
-- pwsh: Invoke-Build Build
+- pwsh: Invoke-Build Build -Suffix $(suffix)
   displayName: 'Build the library'
 
-- pwsh: Invoke-Build Pack
+- pwsh: Invoke-Build Pack -Suffix $(suffix)
   displayName: 'Pack the build'
 
-- pwsh: Invoke-Build Deploy -NugetSource "https://api.nuget.org/v3/index.json" -NugetApiKey $(NugetApiKey)
+- task: NuGetAuthenticate@0
+
+- pwsh: Invoke-Build Deploy -NugetSource "$(nugetSource)" -NugetApiKey $(NugetApiKey)
   displayName: 'Deploy the package'
