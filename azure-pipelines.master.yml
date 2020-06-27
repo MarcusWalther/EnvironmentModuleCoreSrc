@@ -12,10 +12,10 @@ steps:
 - pwsh: .\SetupEnvironment.ps1
   displayName: 'Setup the environment'
 
-- pwsh: Invoke-Build Build -Suffix $(suffix)
+- pwsh: Invoke-Build Build -Suffix "$(suffix)"
   displayName: 'Build the library'
 
-- pwsh: Invoke-Build Pack -Suffix $(suffix)
+- pwsh: Invoke-Build Pack -Suffix "$(suffix)"
   displayName: 'Pack the build'
 
 - task: NuGetAuthenticate@0
