@@ -47,14 +47,14 @@ namespace EnvironmentModuleCore
             ModuleRoot = moduleRoot;
             TmpDirectory = tmpDirectory;
 
-            Dependencies = new DependencyInfo[0];
-            SearchPaths = new SearchPath[0];
-            RequiredItems = new RequiredItem[0];
+            Dependencies = Array.Empty<DependencyInfo>();
+            SearchPaths = Array.Empty<SearchPath>();
+            RequiredItems = Array.Empty<RequiredItem>();
 
             DirectUnload = false;
             StyleVersion = 1.0;
             Category = string.Empty;
-            Parameters = new Dictionary<string, string>();
+            Parameters = new Dictionary<string, ParameterInfoBase>();
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace EnvironmentModuleCore
         /// <summary>
         /// Gets or sets the parameters defined by the module.
         /// </summary>
-        public Dictionary<string, string> Parameters { get; set; }
+        public Dictionary<string, ParameterInfoBase> Parameters { get; set; }
         #endregion
 
         #region Public Functions
@@ -166,13 +166,12 @@ namespace EnvironmentModuleCore
         /// <returns>True if the infos are equal, false otherwise.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is EnvironmentModule))
+            if (!(obj is EnvironmentModule module))
             {
                 return false;
             }
 
-            EnvironmentModule em = (EnvironmentModule)obj;
-            return (Name == em.Name) && (Version == em.Version) && (Architecture == em.Architecture);
+            return (Name == module.Name) && (Version == module.Version) && (Architecture == module.Architecture);
         }
 
         /// <summary>
