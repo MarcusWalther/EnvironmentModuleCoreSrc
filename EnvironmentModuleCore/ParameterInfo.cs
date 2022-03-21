@@ -19,7 +19,8 @@ namespace EnvironmentModuleCore
         /// <param name="moduleFullName">The module providing the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
         /// <param name="isUserDefined">True if the value was defined manually by the user.</param>
-        public ParameterInfo(string name, string moduleFullName, string value, bool isUserDefined) : base(name, value, isUserDefined)
+        /// <param name="virtualEnvironment">The name of the virtual environment the parameter belongs to. Default is null.</param>
+        public ParameterInfo(string name, string moduleFullName, string value, bool isUserDefined, string virtualEnvironment) : base(name, value, isUserDefined, virtualEnvironment)
         {
             ModuleFullName = moduleFullName;
         } 

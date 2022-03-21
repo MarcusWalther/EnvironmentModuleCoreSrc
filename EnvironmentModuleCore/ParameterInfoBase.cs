@@ -18,11 +18,13 @@ namespace EnvironmentModuleCore
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
         /// <param name="isUserDefined">True if the value was defined manually by the user.</param>
-        public ParameterInfoBase(string name, string value, bool isUserDefined)
+        /// <param name="virtualEnvironment">The name of the virtual environment the parameter belongs to. Default is null.</param>
+        public ParameterInfoBase(string name, string value, bool isUserDefined, string virtualEnvironment)
         {
             Name = name;
             Value = value;
             IsUserDefined = isUserDefined;
+            VirtualEnvironment = virtualEnvironment;
         } 
         #endregion
 
@@ -31,6 +33,11 @@ namespace EnvironmentModuleCore
         /// Gets or sets the unique name of the parameter.
         /// </summary>
         public string Name { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the virtual environment of the parameter.
+        /// </summary>
+        public string VirtualEnvironment { get; protected set; }
 
         /// <summary>
         /// Gets or sets the value of the parameter.

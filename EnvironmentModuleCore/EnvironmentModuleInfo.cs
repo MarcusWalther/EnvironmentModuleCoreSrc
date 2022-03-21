@@ -54,7 +54,7 @@ namespace EnvironmentModuleCore
             DirectUnload = false;
             StyleVersion = 1.0;
             Category = string.Empty;
-            Parameters = new Dictionary<string, ParameterInfoBase>();
+            Parameters = new Dictionary<Tuple<string, string>, ParameterInfoBase>();
         }
 
         /// <summary>
@@ -153,9 +153,9 @@ namespace EnvironmentModuleCore
         public string Category { get; set; }
 
         /// <summary>
-        /// Gets or sets the parameters defined by the module.
+        /// Gets or sets the parameters defined by the module. The key is ("ParameterName", "VirtualEnvironment).
         /// </summary>
-        public Dictionary<string, ParameterInfoBase> Parameters { get; set; }
+        public Dictionary<Tuple<string, string>, ParameterInfoBase> Parameters { get; set; }
         #endregion
 
         #region Public Functions
