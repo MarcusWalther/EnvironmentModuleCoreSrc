@@ -14,6 +14,14 @@ namespace EnvironmentModuleCore
     /// </summary>
     public class EnvironmentModule : EnvironmentModuleInfo
     {
+        public delegate void PathAddedHandler(PathInfo sender, EnvironmentModule module);
+        public delegate void FunctionAddedHandler(FunctionInfo sender, EnvironmentModule module);
+        public delegate void AliasAddedHandler(AliasInfo sender, EnvironmentModule module);
+        public event PathInfo.PathUpdateHandler OnPathChanged;
+        public event PathAddedHandler OnPathAdded;
+        public event FunctionAddedHandler OnFunctionAdded;
+        public event AliasAddedHandler OnAliasAdded;
+
         #region Private Fields
         /// <summary>
         /// All path info objects that can be accesses using the Properties "AppendPaths", "Paths" and "PrependPaths".
@@ -110,9 +118,10 @@ namespace EnvironmentModuleCore
         /// </summary>
         /// <param name="envVar">The environment variable to modify.</param>
         /// <param name="path">The value to prepend.</param>
-        public void AddPrependPath(string envVar, string path)
+        /// <param name="key">The unique key of the path modification.</param>
+        public void AddPrependPath(string envVar, string path, string key = null)
         {
-            AddPath(PathType.PREPEND, envVar, path);
+            AddPath(PathType.PREPEND, envVar, path, key);
         }
 
         /// <summary>
@@ -120,9 +129,10 @@ namespace EnvironmentModuleCore
         /// </summary>
         /// <param name="envVar">The environment variable to modify.</param>
         /// <param name="path">The value to append.</param>
-        public void AddAppendPath(string envVar, string path)
+        /// <param name="key">The unique key of the path modification.</param>
+        public void AddAppendPath(string envVar, string path, string key = null)
         {
-            AddPath(PathType.APPEND, envVar, path);
+            AddPath(PathType.APPEND, envVar, path, key);
         }
 
         /// <summary>
@@ -130,9 +140,10 @@ namespace EnvironmentModuleCore
         /// </summary>
         /// <param name="envVar">The environment variable to modify.</param>
         /// <param name="path">The value to set.</param>
-        public void AddSetPath(string envVar, string path)
+        /// <param name="key">The unique key of the path modification.</param>
+        public void AddSetPath(string envVar, string path, string key = null)
         {
-            AddPath(PathType.SET, envVar, path);
+            AddPath(PathType.SET, envVar, path, key);
         }
 
         /// <summary>
@@ -143,7 +154,9 @@ namespace EnvironmentModuleCore
         /// <param name="description">An additional description that can be displayed for the user.</param>
         public void AddAlias(string aliasName, string command, string description = "")
         {
-            Aliases[aliasName] = new AliasInfo(aliasName, FullName, command, description);
+            AliasInfo alias = new AliasInfo(aliasName, FullName, command, description);
+            Aliases[aliasName] = alias;
+            OnAliasAdded?.Invoke(alias, this);
         }
 
         /// <summary>
@@ -153,7 +166,9 @@ namespace EnvironmentModuleCore
         /// <param name="content">The function content. Usually this is a ScriptBlock. The object must provide an Invoke function.</param>
         public void AddFunction(string functionName, object content)
         {
-            Functions[functionName] = new FunctionInfo(functionName, FullName, content);
+            FunctionInfo function = new FunctionInfo(functionName, FullName, content);
+            Functions[functionName] = function;
+            OnFunctionAdded?.Invoke(function, this);
         }
         #endregion
 
@@ -164,12 +179,17 @@ namespace EnvironmentModuleCore
         /// <param name="pathType">The type of the path manipulation.</param>
         /// <param name="variable">The environment variable to modify.</param>
         /// <param name="value">The new value to use for the manipulation.</param>
-        protected void AddPath(PathType pathType, string variable, string value)
+        /// <param name="key">The unique key of the path modification.</param>
+        protected void AddPath(PathType pathType, string variable, string value, string key)
         {
-            string key = $"{pathType.ToString()}_{variable}";
-            if (!pathInfos.TryGetValue(key, out var info))
+            string internalKey = $"{pathType.ToString()}_{variable}";
+            if (pathType == PathType.APPEND || pathType == PathType.PREPEND)
+                internalKey += $"_{key}";  // The append mode does support different values with different keys
+
+            if (!pathInfos.TryGetValue(internalKey, out var info))
             {
-                info = new PathInfo(FullName, pathType, variable, new List<string>() { value });
+                info = new PathInfo(FullName, pathType, variable, new List<string>() { value }, key);
+                info.OnValueChanged += (sender, args) => OnPathChanged?.Invoke(sender, args);
             }
             else
             {
@@ -179,7 +199,8 @@ namespace EnvironmentModuleCore
                     info.Values.Add(value);
             }
 
-            pathInfos[key] = info;
+            pathInfos[internalKey] = info;
+            OnPathAdded?.Invoke(info, this);
         }
         #endregion
     }

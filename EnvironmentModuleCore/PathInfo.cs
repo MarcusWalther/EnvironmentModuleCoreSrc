@@ -3,6 +3,9 @@
 // </copyright>
 // <author>Marcus Walther</author>
 
+using System;
+using System.Linq;
+
 namespace EnvironmentModuleCore
 {
     using System.Collections.Generic;
@@ -35,10 +38,29 @@ namespace EnvironmentModuleCore
     }
 
     /// <summary>
+    /// The event class used if an previously defined path was updated.
+    /// </summary>
+    public class PathUpdateEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Gets the values that were previously assigned to the path info.
+        /// </summary>
+        public List<string> OldValues { get; }
+
+        public PathUpdateEventArgs(List<string> oldValues)
+        {
+            OldValues = oldValues;
+        }
+    }
+
+    /// <summary>
     /// This class represents a environment variable modification performed by an environment module.
     /// </summary>
     public class PathInfo
     {
+        public delegate void PathUpdateHandler(PathInfo sender, PathUpdateEventArgs e);
+        public event PathUpdateHandler OnValueChanged;
+
         /// <summary>
         /// Initializes a new instance of the PathInfo class with the given parameters.
         /// </summary>
@@ -46,7 +68,8 @@ namespace EnvironmentModuleCore
         /// <param name="pathType">The type of the path modification.</param>
         /// <param name="variable">The environment variable to modify.</param>
         /// <param name="values">The new values to handle.</param>
-        public PathInfo(string moduleFullName, PathType pathType, string variable, List<string> values = null)
+        /// <param name="key">A unique key that can be used to identify and change the value during runtime.</param>
+        public PathInfo(string moduleFullName, PathType pathType, string variable, List<string> values = null, string key = null)
         {
             ModuleFullName = moduleFullName;
             PathType = pathType;
@@ -58,6 +81,7 @@ namespace EnvironmentModuleCore
             }
 
             Values = values;
+            Key = key;
         }
 
         #region Properties
@@ -77,9 +101,14 @@ namespace EnvironmentModuleCore
         public string Variable { get; }
 
         /// <summary>
+        /// Gets the optional key of the object. The key can be used to identify and change the value dynamically.
+        /// </summary>
+        public string Key { get; }
+
+        /// <summary>
         /// Gets or sets the values that are used by the modification.
         /// </summary>
-        public List<string> Values { get; set; }
+        public List<string> Values { get; internal set; }
         #endregion
 
         /// <summary>
@@ -96,7 +125,7 @@ namespace EnvironmentModuleCore
                 return false;
             }
 
-            return other.Variable == Variable && other.PathType == PathType;
+            return other.Variable == Variable && other.PathType == PathType && other.Key == Key;
         }
 
         /// <summary>
@@ -105,7 +134,41 @@ namespace EnvironmentModuleCore
         /// <returns>The created hash code.</returns>
         public override int GetHashCode()
         {
-            return PathType.GetHashCode() ^ Variable.GetHashCode();
+            int result = PathType.GetHashCode() ^ Variable.GetHashCode();
+            if (!string.IsNullOrEmpty(Key))
+                result ^= Key.GetHashCode();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Change the values of the path and invoke the OnValuesChanged event.
+        /// </summary>
+        /// <param name="newValues">The new path values to use.</param>
+        public void ChangeValues(IEnumerable<string> newValues)
+        {
+            ChangeValues(newValues.ToArray());
+        }
+
+        /// <summary>
+        /// Change the values of the path and invoke the OnValuesChanged event.
+        /// </summary>
+        /// <param name="newValue">The new path value to use.</param>
+        public void ChangeValues(string newValue)
+        {
+            ChangeValues(new[] { newValue });
+        }
+
+        /// <summary>
+        /// Change the values of the path and invoke the OnValuesChanged event.
+        /// </summary>
+        /// <param name="newValues">The new path values to use.</param>
+        public void ChangeValues(string[] newValues)
+        {
+            List<string> valueCopy = new List<string>(Values);
+            Values.Clear();
+            Values.AddRange(newValues);
+            OnValueChanged?.Invoke(this, new PathUpdateEventArgs(valueCopy));
         }
     }
 }
