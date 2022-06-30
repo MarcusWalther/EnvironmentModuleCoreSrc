@@ -4,21 +4,34 @@
 // <author>Marcus Walther</author>
 
 // ReSharper disable UnusedMember.Global
+
+using System.IO;
+
 namespace EnvironmentModuleCore
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// This info class represents an environment module. It can be used for modules that are loaded or not already loaded. It contains only meta information.
     /// </summary>
     public class EnvironmentModuleInfo : EnvironmentModuleInfoBase
     {
+        public delegate void PathAddedHandler(PathInfo sender, EnvironmentModuleInfo module);
+        public event PathInfo.PathUpdateHandler OnPathChanged;
+        public event PathAddedHandler OnPathAdded;
+
         #region Private Fields
         /// <summary>
         /// The values associated with these search paths are checked as candidates in order to identify the root path.
         /// </summary>
-        private SearchPath[] searchPaths; 
+        private SearchPath[] searchPaths;
+
+        /// <summary>
+        /// All path info objects that can be accesses using the Properties "AppendPaths", "Paths" and "PrependPaths".
+        /// </summary>
+        private readonly Dictionary<string, PathInfo> pathInfos;
         #endregion
 
         /// <summary>
@@ -55,6 +68,7 @@ namespace EnvironmentModuleCore
             StyleVersion = 1.0;
             Category = string.Empty;
             Parameters = new Dictionary<Tuple<string, string>, ParameterInfoBase>();
+            pathInfos = new Dictionary<string, PathInfo>();
         }
 
         /// <summary>
@@ -100,6 +114,11 @@ namespace EnvironmentModuleCore
             StyleVersion = other.StyleVersion;
             Category = other.Category;
             Parameters = other.Parameters;
+            pathInfos = new Dictionary<string, PathInfo>();
+            foreach (PathInfo otherPath in other.Paths)
+            {
+                AddPath(otherPath.PathType, otherPath.Variable, string.Join(Path.PathSeparator.ToString(), otherPath.Values), otherPath.Key);
+            }
         }
 
         #region Properties
@@ -156,9 +175,78 @@ namespace EnvironmentModuleCore
         /// Gets or sets the parameters defined by the module. The key is ("ParameterName", "VirtualEnvironment).
         /// </summary>
         public Dictionary<Tuple<string, string>, ParameterInfoBase> Parameters { get; set; }
+
+        /// <summary>
+        /// Gets a collection of paths that are added to the environment variables when the module is loaded. The values
+        /// are removed from the environment-variable when unload is called.
+        /// </summary>
+        public HashSet<PathInfo> Paths => new HashSet<PathInfo>(pathInfos.Values);
+
+        /// <summary>
+        /// Gets a collection of paths that are appended to the environment variables when the module is loaded. The values
+        /// are removed from the environment when unload is called.
+        /// </summary>
+        public HashSet<PathInfo> AppendPaths
+        {
+            get { return new HashSet<PathInfo>(pathInfos.Values.Where(x => x.PathType == PathType.APPEND)); }
+        }
+
+        /// <summary>
+        /// Gets a collection of paths that are prepended to the environment variables when the module is loaded. The values
+        /// are removed from the environment-variable when unload is called.
+        /// </summary>
+        public HashSet<PathInfo> PrependPaths
+        {
+            get { return new HashSet<PathInfo>(pathInfos.Values.Where(x => x.PathType == PathType.PREPEND)); }
+        }
+
+        /// <summary>
+        /// Gets a collection of paths that are set to the environment variables when the module is loaded. The values
+        /// are removed from the environment-variable when unload is called.
+        /// </summary>
+        public HashSet<PathInfo> SetPaths
+        {
+            get { return new HashSet<PathInfo>(pathInfos.Values.Where(x => x.PathType == PathType.SET)); }
+        }
         #endregion
 
         #region Public Functions
+        /// <summary>
+        /// Add a prepend environment variable manipulation to the definition.
+        /// </summary>
+        /// <param name="envVar">The environment variable to modify.</param>
+        /// <param name="path">The value to prepend.</param>
+        /// <param name="key">The unique key of the path modification.</param>
+        /// <returns>The path info object containing the information of the path.</returns>
+        public PathInfo AddPrependPath(string envVar, string path, string key = null)
+        {
+            return AddPath(PathType.PREPEND, envVar, path, key);
+        }
+
+        /// <summary>
+        /// Add a append environment variable manipulation to the definition.
+        /// </summary>
+        /// <param name="envVar">The environment variable to modify.</param>
+        /// <param name="path">The value to append.</param>
+        /// <param name="key">The unique key of the path modification.</param>
+        /// <returns>The path info object containing the information of the path.</returns>
+        public PathInfo AddAppendPath(string envVar, string path, string key = null)
+        {
+            return AddPath(PathType.APPEND, envVar, path, key);
+        }
+
+        /// <summary>
+        /// Add a environment variable manipulation to the definition that overwrites or defines an environment variable.
+        /// </summary>
+        /// <param name="envVar">The environment variable to modify.</param>
+        /// <param name="path">The value to set.</param>
+        /// <param name="key">The unique key of the path modification.</param>
+        /// <returns>The path info object containing the information of the path.</returns>
+        public PathInfo AddSetPath(string envVar, string path, string key = null)
+        {
+            return AddPath(PathType.SET, envVar, path, key);
+        }
+
         /// <summary>
         /// Compares two environment module infos. They are equal if they have the same name, version and architecture.
         /// </summary>
@@ -190,7 +278,43 @@ namespace EnvironmentModuleCore
         public override string ToString()
         {
             return Name;
-        } 
+        }
+        #endregion
+
+
+        #region Private Functions
+        /// <summary>
+        /// Add a new environment variable manipulation to the definition of the environment module.
+        /// </summary>
+        /// <param name="pathType">The type of the path manipulation.</param>
+        /// <param name="variable">The environment variable to modify.</param>
+        /// <param name="value">The new value to use for the manipulation.</param>
+        /// <param name="key">The unique key of the path modification.</param>
+        private PathInfo AddPath(PathType pathType, string variable, string value, string key)
+        {
+            var values = value.Split(Path.PathSeparator).ToList();
+            string internalKey = $"{pathType.ToString()}_{variable}";
+            if (pathType == PathType.APPEND || pathType == PathType.PREPEND)
+                internalKey += $"_{key}";  // The append mode does support different values with different keys
+
+            if (!pathInfos.TryGetValue(internalKey, out var info))
+            {
+                info = new PathInfo(FullName, pathType, variable, values, key);
+                info.OnValueChanged += (sender, args) => OnPathChanged?.Invoke(sender, args);
+            }
+            else
+            {
+                if (pathType == PathType.SET)
+                    info.Values[0] = value;
+                else
+                    info.Values.Add(value);
+            }
+
+            pathInfos[internalKey] = info;
+            OnPathAdded?.Invoke(info, this);
+
+            return info;
+        }
         #endregion
     }
 }

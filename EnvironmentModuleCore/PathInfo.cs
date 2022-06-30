@@ -4,6 +4,7 @@
 // <author>Marcus Walther</author>
 
 using System;
+using System.IO;
 using System.Linq;
 
 namespace EnvironmentModuleCore
@@ -169,6 +170,15 @@ namespace EnvironmentModuleCore
             Values.Clear();
             Values.AddRange(newValues);
             OnValueChanged?.Invoke(this, new PathUpdateEventArgs(valueCopy));
+        }
+
+        public override string ToString()
+        {
+            string identifier = Variable;
+            if (!string.IsNullOrEmpty(Key))
+                identifier += $" ({Key})";
+
+            return $"{identifier} = {string.Join(Path.PathSeparator.ToString(), Values)} [{PathType}] ({ModuleFullName})";
         }
     }
 }
