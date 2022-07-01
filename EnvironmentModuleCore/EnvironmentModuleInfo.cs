@@ -305,7 +305,7 @@ namespace EnvironmentModuleCore
             else
             {
                 if (pathType == PathType.SET)
-                    info.Values[0] = value;
+                    info.Values = values;
                 else
                     info.Values.Add(value);
             }
