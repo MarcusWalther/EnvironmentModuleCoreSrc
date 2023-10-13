@@ -15,8 +15,11 @@ namespace EnvironmentModuleCore
     {
         public delegate void FunctionAddedHandler(FunctionInfo sender, EnvironmentModule module);
         public delegate void AliasAddedHandler(AliasInfo sender, EnvironmentModule module);
+        public delegate void LoadedHandler(EnvironmentModule module);
         public event FunctionAddedHandler OnFunctionAdded;
         public event AliasAddedHandler OnAliasAdded;
+        public event LoadedHandler OnLoaded;
+        public event LoadedHandler OnUnloaded;
 
         #region Constructors
         /// <summary>
@@ -91,6 +94,24 @@ namespace EnvironmentModuleCore
             FunctionInfo function = new FunctionInfo(functionName, FullName, content);
             Functions[functionName] = function;
             OnFunctionAdded?.Invoke(function, this);
+        }
+
+        /// <summary>
+        /// The function that indicates that the loading process was completed. It will trigger the OnLoaded event.
+        /// </summary>
+        public void FullyLoaded()
+        {
+            OnLoaded?.Invoke(this);
+        }
+
+        /// <summary>
+        /// The function that indicates that the unloading process was completed. It will trigger the OnUnloaded event.
+        /// </summary>
+        public void FullyUnloaded()
+        {
+            OnUnloaded?.Invoke(this);
+            OnLoaded = null;
+            OnUnloaded = null;
         }
         #endregion
     }
