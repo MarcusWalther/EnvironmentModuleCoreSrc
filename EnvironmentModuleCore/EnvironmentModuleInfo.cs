@@ -63,12 +63,20 @@ namespace EnvironmentModuleCore
             Dependencies = Array.Empty<DependencyInfo>();
             SearchPaths = Array.Empty<SearchPath>();
             RequiredItems = Array.Empty<RequiredItem>();
+            MergeModules = Array.Empty<string>();
 
             DirectUnload = false;
             StyleVersion = 1.0;
             Category = string.Empty;
             Parameters = new Dictionary<Tuple<string, string>, ParameterInfoBase>();
             pathInfos = new Dictionary<string, PathInfo>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EnvironmentModuleInfo class without any values.
+        /// </summary>
+        public EnvironmentModuleInfo() : this(null, null, null, null, null, null, null, null)
+        {
         }
 
         /// <summary>
@@ -110,6 +118,7 @@ namespace EnvironmentModuleCore
             Dependencies = other.Dependencies;
             SearchPaths = other.SearchPaths;
             RequiredItems = other.RequiredItems;
+            MergeModules = other.MergeModules;
             DirectUnload = other.DirectUnload;
             StyleVersion = other.StyleVersion;
             Category = other.Category;
@@ -150,6 +159,11 @@ namespace EnvironmentModuleCore
                 Array.Sort(searchPaths);
             }
         }
+
+        /// <summary>
+        /// Gets or sets a list of module files that should be considered for merging.
+        /// </summary>
+        public string[] MergeModules { get; set; }
 
         /// <summary>
         /// Gets or sets the items that must be available in the candidate in order to use it as module root path.
@@ -280,7 +294,6 @@ namespace EnvironmentModuleCore
             return Name;
         }
         #endregion
-
 
         #region Private Functions
         /// <summary>
