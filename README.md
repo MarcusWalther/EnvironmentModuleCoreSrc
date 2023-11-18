@@ -16,7 +16,13 @@
 </p>
 
 # Build
-The project is written in C#, based on .Net Core 2.1. It was developed using Visual Studio 2017. In order to build it, load the solution file into Visual Studio and compile it. The file *EnvironmentModuleCore.nuspec* can be used to create a nuget package.
+The project is written in C#, based on .Net Standard 2.0. It was developed using Visual Studio 2022. In order to build it, load the solution file into Visual Studio and compile it. Alternatively it is possible to build and pack the solution on the command line.
+
+```powershell
+# Requires the module InvokeBuild (https://github.com/nightroman/Invoke-Build)
+Invoke-Build Build
+Invoke-Build Pack
+```
 
 # References
 * Library -- Scriban (see https://github.com/lunet-io/scriban) - BSD 2-Clause "Simplified" License.
