@@ -26,5 +26,6 @@ Invoke-Build Pack
 
 # References
 * Library -- Scriban (see https://github.com/lunet-io/scriban) - BSD 2-Clause "Simplified" License.
+* Powershell Module -- InvokeBuild (see https://github.com/nightroman/Invoke-Build) - Apache License, Version 2.0
 * Idea -- Environment Modules on Linux Systems (see http://modules.sourceforge.net)
 * Icon -- Adaption of Powershell Icon (see https://de.wikipedia.org/wiki/Datei:PowerShell_5.0_icon.png)
