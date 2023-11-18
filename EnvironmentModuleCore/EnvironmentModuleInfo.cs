@@ -66,6 +66,7 @@ namespace EnvironmentModuleCore
             MergeModules = Array.Empty<string>();
 
             DirectUnload = false;
+            SwitchDirectoryToModuleRoot = false;
             StyleVersion = 1.0;
             Category = string.Empty;
             Parameters = new Dictionary<Tuple<string, string>, ParameterInfoBase>();
@@ -120,6 +121,7 @@ namespace EnvironmentModuleCore
             RequiredItems = other.RequiredItems;
             MergeModules = other.MergeModules;
             DirectUnload = other.DirectUnload;
+            SwitchDirectoryToModuleRoot = other.SwitchDirectoryToModuleRoot;
             StyleVersion = other.StyleVersion;
             Category = other.Category;
             Parameters = other.Parameters;
@@ -174,6 +176,11 @@ namespace EnvironmentModuleCore
         /// Gets or sets a value indicating whether the module should be unloaded after the import, so that just the dependencies will remain.
         /// </summary>
         public bool DirectUnload { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the current directory should be set to the identified module root after loading.
+        /// </summary>
+        public bool SwitchDirectoryToModuleRoot { get; set; }
 
         /// <summary>
         /// Gets or sets the version of the code style used to write the pse/psm file. This field is reserved for the future and not used right now.
