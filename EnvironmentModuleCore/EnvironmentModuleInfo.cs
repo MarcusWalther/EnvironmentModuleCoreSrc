@@ -262,6 +262,16 @@ namespace EnvironmentModuleCore
         }
 
         /// <summary>
+        /// Add a new path info to the internal storage.
+        /// </summary>
+        /// <param name="info">The path info object defining the environment variable and the value to add.</param>
+        /// <returns>The created path info object that was stored internally.</returns>
+        public PathInfo AddPath(PathInfo info)
+        {
+            return AddPath(info.PathType, info.Variable, info.Values, info.Key);
+        }
+
+        /// <summary>
         /// Compares two environment module infos. They are equal if they have the same name, version and architecture.
         /// </summary>
         /// <param name="obj">The object to compare.</param>
@@ -301,11 +311,22 @@ namespace EnvironmentModuleCore
         /// </summary>
         /// <param name="pathType">The type of the path manipulation.</param>
         /// <param name="variable">The environment variable to modify.</param>
-        /// <param name="value">The new value to use for the manipulation.</param>
+        /// <param name="value">The new value to use for the manipulation. Multiple entries are separated by the Path separator of the System (like ';' on Windows).</param>
         /// <param name="key">The unique key of the path modification.</param>
         private PathInfo AddPath(PathType pathType, string variable, string value, string key)
         {
             var values = value.Split(Path.PathSeparator).ToList();
+            return AddPath(pathType, variable, values, key);
+        }
+
+        /// <summary>
+        /// Add a new environment variable manipulation to the definition of the environment module.
+        /// </summary>
+        /// <param name="pathType">The type of the path manipulation.</param>
+        /// <param name="variable">The environment variable to modify.</param>
+        /// <param name="values">The new values to use for the manipulation.</param>
+        /// <param name="key">The unique key of the path modification.</param>
+        private PathInfo AddPath(PathType pathType, string variable, List<string> values, string key) {
             string internalKey = $"{pathType.ToString()}_{variable}";
             if (pathType == PathType.APPEND || pathType == PathType.PREPEND)
                 internalKey += $"_{key}";  // The append mode does support different values with different keys
@@ -320,7 +341,7 @@ namespace EnvironmentModuleCore
                 if (pathType == PathType.SET)
                     info.Values = values;
                 else
-                    info.Values.Add(value);
+                    info.Values.AddRange(values);
             }
 
             pathInfos[internalKey] = info;
