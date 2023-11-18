@@ -67,7 +67,7 @@ namespace EnvironmentModuleCore
 
             DirectUnload = false;
             SwitchDirectoryToModuleRoot = false;
-            StyleVersion = 1.0;
+            StyleVersion = 3.0;
             Category = string.Empty;
             Parameters = new Dictionary<Tuple<string, string>, ParameterInfoBase>();
             pathInfos = new Dictionary<string, PathInfo>();
