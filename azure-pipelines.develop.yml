@@ -18,7 +18,7 @@ steps:
 - pwsh: Invoke-Build Pack -Suffix "$(suffix)"
   displayName: 'Pack the build'
 
-- task: NuGetAuthenticate@0
+- task: NuGetAuthenticate@1
 
 - pwsh: Invoke-Build Deploy -NugetSource "$(nugetSource)" -NugetApiKey AzureArtifacts
   displayName: 'Deploy the package'
