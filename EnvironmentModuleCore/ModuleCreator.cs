@@ -68,7 +68,7 @@ namespace EnvironmentModuleCore
                 CustomCode      = string.Empty,
                 Description = description,
                 DirectUnload    = $"${directUnload}",
-                ModuleType      = EnvironmentModuleType.Meta.ToString(),
+                ModuleType      = nameof(EnvironmentModuleType.Meta),
                 Parameters      = new Dictionary<string, string>()
             };
 
@@ -94,6 +94,7 @@ namespace EnvironmentModuleCore
         /// <param name="defaultSearchPaths">The default search paths to consider for the mounting process.</param>
         /// <param name="dependencies">The dependencies of the environment module.</param>
         /// <param name="parameters">The parameters as key value pairs.</param>
+        /// <param name="moduleType">The type of the module to create.</param>
         // ReSharper disable once UnusedMember.Global
         public static void CreateEnvironmentModule(
             string name,
@@ -107,7 +108,8 @@ namespace EnvironmentModuleCore
             RequiredItem[] requiredItems = null,
             SearchPath[] defaultSearchPaths = null,
             DependencyInfo[] dependencies = null,
-            Dictionary<string, string> parameters = null)
+            Dictionary<string, string> parameters = null,
+            EnvironmentModuleType moduleType = EnvironmentModuleType.Default)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -165,7 +167,7 @@ namespace EnvironmentModuleCore
                 Description = description,
                 CustomCode = string.Empty,
                 DirectUnload = "$false",
-                ModuleType = EnvironmentModuleType.Default.ToString(),
+                ModuleType = moduleType.ToString(),
                 Parameters = parameters
             }; 
 
