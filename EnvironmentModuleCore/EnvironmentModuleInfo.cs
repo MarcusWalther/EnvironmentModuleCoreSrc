@@ -39,13 +39,14 @@ namespace EnvironmentModuleCore
         /// </summary>
         /// <param name="moduleBase">The directory holding the module files (like .psm1, pse1, etc.).</param>
         /// <param name="moduleRoot">The root module that was identified holding the required items.</param>
-        /// <param name="tmpDirectory">The tmp. directory that can be used to store session related files etc..</param>
+        /// <param name="tmpDirectory">The tmp. directory that can be used to store session related files etc.</param>
         /// <param name="fullName">The full name of the module.</param>
         /// <param name="name">The short name of the module.</param>
         /// <param name="version">The version of the module.</param>
         /// <param name="architecture">The architecture of the module.</param>
         /// <param name="additionalOptions">Additional options specifying the module.</param>
         /// <param name="moduleType">The type of the module.</param>
+        /// <param name="versionSpecifier">Additional version information to consider.</param>
         public EnvironmentModuleInfo(
             string moduleBase,
             string moduleRoot,
@@ -55,7 +56,8 @@ namespace EnvironmentModuleCore
             string version,
             string architecture,
             string additionalOptions,
-            EnvironmentModuleType moduleType = EnvironmentModuleType.Default) : base(fullName, moduleBase, name, version, architecture, additionalOptions, moduleType)
+            EnvironmentModuleType moduleType = EnvironmentModuleType.Default,
+            VersionInfo[] versionSpecifier = null) : base(fullName, moduleBase, name, version, architecture, additionalOptions, moduleType)
         {
             ModuleRoot = moduleRoot;
             TmpDirectory = tmpDirectory;
@@ -71,6 +73,7 @@ namespace EnvironmentModuleCore
             Category = string.Empty;
             Parameters = new Dictionary<Tuple<string, string>, ParameterInfoBase>();
             pathInfos = new Dictionary<string, PathInfo>();
+            VersionSpecifier = versionSpecifier ?? Array.Empty<VersionInfo>();
         }
 
         /// <summary>
@@ -85,8 +88,9 @@ namespace EnvironmentModuleCore
         /// </summary>
         /// <param name="infoBase">The base object containing meta information.</param>
         /// <param name="moduleRoot">The root module that was identified holding the required items.</param>
-        /// <param name="tmpDirectory">The tmp. directory that can be used to store session related files etc..</param>
-        public EnvironmentModuleInfo(EnvironmentModuleInfoBase infoBase, string moduleRoot, string tmpDirectory) :
+        /// <param name="tmpDirectory">The tmp. directory that can be used to store session related files etc.</param>
+        /// <param name="versionSpecifier">Additional version information to consider.</param>
+        public EnvironmentModuleInfo(EnvironmentModuleInfoBase infoBase, string moduleRoot, string tmpDirectory, VersionInfo[] versionSpecifier = null) :
             this(
                 infoBase.ModuleBase,
                 moduleRoot,
@@ -96,7 +100,8 @@ namespace EnvironmentModuleCore
                 infoBase.Version,
                 infoBase.Architecture,
                 infoBase.AdditionalOptions,
-                infoBase.ModuleType)
+                infoBase.ModuleType,
+                versionSpecifier)
         {
         }
 
@@ -114,7 +119,8 @@ namespace EnvironmentModuleCore
                 other.Version,
                 other.Architecture,
                 other.AdditionalOptions,
-                other.ModuleType)
+                other.ModuleType,
+                other.VersionSpecifier)
         {
             Dependencies = other.Dependencies;
             SearchPaths = other.SearchPaths;
@@ -229,6 +235,8 @@ namespace EnvironmentModuleCore
         {
             get { return new HashSet<PathInfo>(pathInfos.Values.Where(x => x.PathType == PathType.SET)); }
         }
+
+        public VersionInfo[] VersionSpecifier { get; set; }
         #endregion
 
         #region Public Functions

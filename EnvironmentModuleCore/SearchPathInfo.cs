@@ -28,9 +28,9 @@ namespace EnvironmentModuleCore
         public string Module { get; set; }
 
         /// <summary>
-        /// Convert the object to a human readable string.
+        /// Convert the object to a human-readable string.
         /// </summary>
-        /// <returns>The human readable string.</returns>
+        /// <returns>The human-readable string.</returns>
         public override string ToString()
         {
             string subPath = string.IsNullOrEmpty(SubFolder) ? string.Empty : $" {Path.DirectorySeparatorChar} {SubFolder}";

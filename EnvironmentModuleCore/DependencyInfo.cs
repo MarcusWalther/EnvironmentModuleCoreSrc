@@ -1,5 +1,5 @@
 ﻿// <copyright file="DependencyInfo.cs">
-//     Copyright 2019 Marcus Walther
+//     Copyright 2025 Marcus Walther
 // </copyright>
 // <author>Marcus Walther</author>
 

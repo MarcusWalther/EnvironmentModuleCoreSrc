@@ -21,7 +21,7 @@ namespace EnvironmentModuleCore
         Meta,
         
         /// <summary>
-        /// This module does provide functions, aliases etc, but cannot be loaded directly.
+        /// This module does provide functions, aliases etc., but cannot be loaded directly.
         /// </summary>
         // ReSharper disable once UnusedMember.Global
         Abstract
@@ -33,7 +33,7 @@ namespace EnvironmentModuleCore
     /// </summary>
     public class EnvironmentModuleInfoBase
     {
-        // ATTENTION: Do not add a reference to the Powershell Module object. Otherwise it cannot be serialized on all platforms by the Powershell.
+        // ATTENTION: Do not add a reference to the Powershell Module object. Otherwise, it cannot be serialized on all platforms by the Powershell.
 
         /// <summary>
         /// Initializes a new instance of the EnvironmentModuleInfoBase class with the given parameters.
@@ -98,7 +98,7 @@ namespace EnvironmentModuleCore
         /// <summary>
         /// Gets or sets the version of the application or library.
         /// </summary>
-        public string Version { get; protected set; }
+        public string Version { get; set; }
         #endregion
     }
 }
