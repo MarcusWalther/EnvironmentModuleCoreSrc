@@ -24,6 +24,11 @@ namespace EnvironmentModuleCore
         public static readonly string TYPE_REGEX_FILE_VERSION = "REGEX_FILE_VERSION";
 
         /// <summary>
+        /// The type specifier that is used if the version is parsed from a file name.
+        /// </summary>
+        public static readonly string TYPE_REGEX_FILE_NAME_VERSION = "REGEX_FILE_NAME_VERSION";
+
+        /// <summary>
         /// The type specifier that is used if the version is specified as constant value.
         /// </summary>
         public static readonly string TYPE_CONSTANT_VERSION = "CONSTANT_VERSION";
