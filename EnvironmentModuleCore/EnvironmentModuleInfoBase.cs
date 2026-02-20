@@ -86,7 +86,7 @@ namespace EnvironmentModuleCore
         public string ModuleBase { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the the type of the module.
+        /// Gets or sets the type of the module.
         /// </summary>
         public EnvironmentModuleType ModuleType { get; set; }
 
