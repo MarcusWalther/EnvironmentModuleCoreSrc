@@ -13,7 +13,7 @@
     <Description></Description>
     <Product />
     <VersionSuffix></VersionSuffix>
-    <Version>3.11.0.0</Version>
+    <Version>3.12.0.0</Version>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
     <PackageIcon>icon.png</PackageIcon>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" Version="6.6.0" />
+    <PackageReference Include="Scriban" Version="7.1.0" />
   </ItemGroup>
 
 </Project>
