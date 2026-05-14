@@ -8,8 +8,6 @@ namespace EnvironmentModuleCore
     using System.Collections.Generic;
     using System.IO;
 
-    using Scriban;
-
     /// <summary>
     /// This rendered class can be used to convert liquid template files to concrete files.
     /// </summary>
@@ -31,7 +29,7 @@ namespace EnvironmentModuleCore
             }
 
             string templateContent = File.ReadAllText(templateFile);
-            Template template = Template.Parse(templateContent);
+            Scriban.Template template = Scriban.Template.Parse(templateContent);
             string concreteContent = template.Render(modelDefinition, memberRenamer: member => member.Name);
             File.WriteAllText(targetFile, concreteContent);
         }
@@ -46,7 +44,7 @@ namespace EnvironmentModuleCore
         public static void CreateConcreteFileFromTemplate(IDictionary<string, object> modelDefinition, string templateFile, string targetFile)
         {
             string templateContent = File.ReadAllText(templateFile);
-            Template template = Template.Parse(templateContent);
+            Scriban.Template template = Scriban.Template.Parse(templateContent);
             string concreteContent = template.Render(modelDefinition, memberRenamer: member => member.Name);
             File.WriteAllText(targetFile, concreteContent);
         }

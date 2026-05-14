@@ -1,0 +1,5 @@
+@{
+    Dependencies = @(
+      {{ for dependency in Entries }}@{Name="{{dependency.ModuleFullName}}"; Optional="${{dependency.IsOptional}}"} {{ if for.last }}{{ else }},{{ end }} {{ end }}
+    )
+}

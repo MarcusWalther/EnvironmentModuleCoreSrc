@@ -1,7 +1,28 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/AutoDetectedNamingRules/=TypesAndNamespaces/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb" /&gt;</s:String>
-	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/AutoDetectedNamingRules/=Parameters/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
-	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/AutoDetectedNamingRules/=Property/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb" /&gt;</s:String>
-	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/AutoDetectedNamingRules/=Locals/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
-	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/AutoDetectedNamingRules/=Method/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb" /&gt;</s:String>
-	<s:Int64 x:Key="/Default/CodeStyle/Naming/CSharpAutoNaming/AutoNamingCompletedVersion/@EntryValue">2</s:Int64></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=66d97eb8_002Da255_002D4cdc_002Db825_002D4ac7b61bb68b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestEmptyString" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestEmptyString&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=741be837_002D0e80_002D4db3_002Dab05_002Dbcbee31c4478/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestEmptyString #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestEmptyString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestPlainText&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestPlainVariable&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestPlainVariableObject&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleIf&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionPlainVariable&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleIf&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleIfElse&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleIfElse&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleFor&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestVariableProperty&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionVariableProperty&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleFor&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestComplexFor&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionComplexFor&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestEscapeText&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

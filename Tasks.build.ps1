@@ -10,7 +10,7 @@ task Prepare {
 }
 
 task Build Prepare, {
-    $cmdArguments = "build", "`"$(Join-Path `"$PSScriptRoot`" EnvironmentModuleCore.sln)`"", "-c", "$Configuration"
+    $cmdArguments = "build", "`"$(Join-Path `"$PSScriptRoot`" EnvironmentModuleCore.slnx)`"", "-c", "$Configuration"
     if(-not [string]::IsNullOrEmpty($Suffix)) {
         $cmdArguments += "--version-suffix", "$Suffix"
     }
