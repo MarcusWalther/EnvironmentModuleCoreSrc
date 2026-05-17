@@ -1,0 +1,1 @@
+A text with trimmed   {{- Variable }}  and with both sides {{- Variable -}}  .

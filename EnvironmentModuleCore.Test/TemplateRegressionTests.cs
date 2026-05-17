@@ -1,5 +1,4 @@
 ﻿using EnvironmentModuleCore.Test.Dummy;
-using System.Dynamic;
 
 namespace EnvironmentModuleCore.Test
 {
@@ -42,6 +41,16 @@ namespace EnvironmentModuleCore.Test
         public void TestRegressionPlainText()
         {
             string name = "ExamplePlainText";
+            var model = new Dictionary<string, object>();
+            model["Variable"] = "test";
+
+            Assert.AreEqual(RenderScriban(name, model), Render(name, model));
+        }
+
+        [TestMethod]
+        public void TestRegressionTrimmedVariable()
+        {
+            string name = "ExampleTrimmedVariable";
             var model = new Dictionary<string, object>();
             model["Variable"] = "test";
 

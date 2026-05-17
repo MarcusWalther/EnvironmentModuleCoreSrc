@@ -219,6 +219,9 @@ namespace EnvironmentModuleCore.Template
         private string Render(ref List<Token>.Enumerator enumerator, object model, int depth, Dictionary<string, object> localVariables)
         {
             string result = string.Empty;
+            string tmpResult = string.Empty;
+            bool trimStart = false;
+
             while (enumerator.MoveNext())
             {
                 if (enumerator.Current == null)
@@ -227,19 +230,48 @@ namespace EnvironmentModuleCore.Template
                 switch (enumerator.Current.TokenType)
                 {
                     case TokenType.TEXT:
-                        result += enumerator.Current.Value;
+                        tmpResult = enumerator.Current.Value;
+                        if (trimStart)
+                            tmpResult = tmpResult.TrimStart();
+
+                        trimStart = false;
+                        result += tmpResult;
                         break;
                     case TokenType.COMMAND_BEGIN:
+                        if (enumerator.Current.Value == "-")
+                        {
+                            result = result.TrimEnd();
+                        }
+                        break;
                     case TokenType.COMMAND_END:
+                        trimStart = enumerator.Current.Value == "-";
                         break;
                     case TokenType.PARAMETER:
-                        result += VariableValueToText(GetVariable(enumerator.Current.Value, model, localVariables));
+                        tmpResult = VariableValueToText(GetVariable(enumerator.Current.Value, model, localVariables));
+
+                        if (trimStart)
+                            tmpResult = tmpResult.TrimStart();
+
+                        trimStart = false;
+                        result += tmpResult;
                         break;
                     case TokenType.KEYWORD_IF:
-                        result += HandleIfExpression(ref enumerator, model, localVariables, depth);
+                        tmpResult = HandleIfExpression(ref enumerator, model, localVariables, depth);
+
+                        if (trimStart)
+                            tmpResult = tmpResult.TrimStart();
+
+                        trimStart = false;
+                        result += tmpResult;
                         break;
                     case TokenType.KEYWORD_FOR:
-                        result += HandleForExpression(ref enumerator, model, localVariables, depth);
+                        tmpResult = HandleForExpression(ref enumerator, model, localVariables, depth);
+
+                        if (trimStart)
+                            tmpResult = tmpResult.TrimStart();
+
+                        trimStart = false;
+                        result += tmpResult;
                         break;
                     case TokenType.KEYWORD_END:
                         if (depth == 0)

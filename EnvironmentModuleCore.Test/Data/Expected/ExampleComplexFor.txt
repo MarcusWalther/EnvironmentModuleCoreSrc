@@ -1,5 +1,5 @@
 @{
     Dependencies = @(
-      @{Name="My Module A"; Optional="$True"} , @{Name="MyModuleB"; Optional="$False"}  
+      @{Name="My Module A"; Optional="$true"} , @{Name="MyModuleB"; Optional="$false"}  
     )
 }

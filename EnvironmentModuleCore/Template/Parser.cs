@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace EnvironmentModuleCore.Template
 {
@@ -58,15 +59,67 @@ namespace EnvironmentModuleCore.Template
             int character;
             string currentToken = string.Empty;
             string escapeSequence = null;
+            string endEscapeSequence = null;
 
             StringReader reader = new StringReader(content);
 
             while ((character = reader.Read()) != -1)
             {
                 bool handled = false;
-
                 char currentCharacter = (char)character;
-                if (currentCharacter == '{' && lastCharacter == '{')
+
+                // Check if we are in an escaped section
+                if (endEscapeSequence != null)
+                {
+                    if (currentCharacter == '}')
+                    {
+                        if (escapeSequence == null)
+                        {
+                            // This may be the start of the escape sequence end
+                            escapeSequence = "" + currentCharacter;
+                            lastCharacter = currentCharacter;
+                            continue;
+                        }
+
+                        if (endEscapeSequence == escapeSequence + '}')
+                        {
+                            // We found the end of the escape sequence
+                            lastCharacter = currentCharacter;
+                            endEscapeSequence = null;
+                            escapeSequence = null;
+                            continue;
+                        }
+                        else
+                        {
+                            // This is something else, but not the end of the escape sequence
+                            currentToken += escapeSequence;
+                            escapeSequence = "" + currentCharacter;
+                            lastCharacter = currentCharacter;
+                            continue;
+                        }
+                    }
+
+                    if (currentCharacter == '%')
+                    {
+                        if (escapeSequence != null)
+                        {
+                            escapeSequence += currentCharacter;
+                            lastCharacter = currentCharacter;
+                            continue;
+                        }
+                    }
+                }
+
+                // Detect trim command sequence for a command begin
+                if(endEscapeSequence == null && currentCharacter == '-' && string.IsNullOrEmpty(currentToken) && tokens.LastOrDefault()?.TokenType == TokenType.COMMAND_BEGIN) 
+                {
+                    tokens.Last().Value += currentCharacter;
+                    lastCharacter = currentCharacter;
+                    continue;
+                }
+                
+                // Detect command begin
+                if (endEscapeSequence == null && currentCharacter == '{' && lastCharacter == '{')
                 {
                     if (currentToken != "{")
                     {
@@ -77,34 +130,60 @@ namespace EnvironmentModuleCore.Template
                     handled = true;
                 }
 
-                // Detect escape sequences like {%{ or {%%{
-                if (currentCharacter == '%' && lastCharacter == '{')
-                {
-                    escapeSequence = "{%";
-                    handled = true;
-                }
-
-                // Detect escape sequences like {%{ or {%%{
-                if (escapeSequence != null)
-                {
-                    if(currentCharacter == '%')
-                        escapeSequence += '%';
-                    else if (currentCharacter == '{')
-                        escapeSequence += "{";
-                    else
-                        escapeSequence = null;
-                    handled = true;
-                }
-
-                if (currentCharacter == '}' && lastCharacter == '}')
+                // Detect command end
+                if (endEscapeSequence == null && currentCharacter == '}' && lastCharacter == '}')
                 {
                     if (!string.IsNullOrEmpty(currentToken))
                     {
                         tokens.AddRange(ParseCommand(currentToken.TrimEnd('}')));
                     }
 
-                    tokens.Add(new Token(TokenType.COMMAND_END));
+                    var lastToken = tokens.LastOrDefault();
+                    if (lastToken?.Value != null && lastToken.Value.EndsWith("-"))
+                    {
+                        lastToken.Value = lastToken.Value.Substring(0, lastToken.Value.Length - 1);
+                        if (lastToken.Value == "")
+                            tokens.RemoveAt(tokens.Count - 1);
+
+                        tokens.Add(new Token(TokenType.COMMAND_END, "-"));
+                    }
+                    else
+                    {
+                        tokens.Add(new Token(TokenType.COMMAND_END));
+                    }
+
                     handled = true;
+                }
+
+                // Detect escape sequences like {%{ or {%%{
+                if (endEscapeSequence == null && currentCharacter == '%' && lastCharacter == '{')
+                {
+                    escapeSequence = "" + lastCharacter + currentCharacter;
+                    lastCharacter = currentCharacter;
+                    currentToken = currentToken.Substring(0, currentToken.Length - 1);
+                    continue;
+                }
+
+                if (endEscapeSequence == null && escapeSequence != null)
+                {
+                    if(currentCharacter == '%')
+                        escapeSequence += currentCharacter;
+                    else if (currentCharacter == '{')
+                    {
+                        // Detected end of escape sequence
+                        escapeSequence += currentCharacter;
+                        endEscapeSequence = escapeSequence.Replace('{', '}');
+                        escapeSequence = null;
+                    }
+                    else
+                    {
+                        // We found something like {%%a that is not a valid escape sequence
+                        currentToken += escapeSequence + currentCharacter;
+                        escapeSequence = null;
+                    }
+
+                    lastCharacter = currentCharacter;
+                    continue;
                 }
 
                 if (!handled)

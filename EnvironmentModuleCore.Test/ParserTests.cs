@@ -104,6 +104,28 @@ namespace EnvironmentModuleCore.Test
         }
 
         /// <summary>
+        /// Check if a template containing only a variable is rendered correctly.
+        /// </summary>
+        [TestMethod]
+        public void TestTrimmedVariable()
+        {
+            string content = GetExampleContent("ExampleTrimmedVariable");
+            var template = Template.Template.Parse(content);
+
+            Assert.AreEqual(TokenType.COMMAND_BEGIN, template.Tokens[1].TokenType);
+            Assert.AreEqual("-", template.Tokens[1].Value);
+            Assert.AreEqual(TokenType.PARAMETER, template.Tokens[2].TokenType);
+            Assert.AreEqual(TokenType.COMMAND_END, template.Tokens[3].TokenType);
+            Assert.AreEqual("Variable", template.Tokens[2].Value);
+
+            // Check if a dynamic object variable is rendered correctly
+            dynamic data = new ExpandoObject();
+            data.Variable = "test";
+
+            Assert.AreEqual($"A text with trimmed{data.Variable}  and with both sides{data.Variable}.", template.Render(data));
+        }
+
+        /// <summary>
         /// Check if a template containing only a variable is rendered correctly when using a real class object.
         /// </summary>
         [TestMethod]

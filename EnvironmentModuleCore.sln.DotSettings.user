@@ -6,23 +6,7 @@
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=741be837_002D0e80_002D4db3_002Dab05_002Dbcbee31c4478/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestEmptyString #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestEmptyString&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleString&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestPlainText&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestPlainVariable&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestPlainVariableObject&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleIf&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleString&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionPlainVariable&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleIf&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleIfElse&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleIfElse&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestSimpleFor&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestVariableProperty&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionVariableProperty&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionSimpleFor&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestComplexFor&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.TemplateRegressionTests.TestRegressionComplexFor&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net10.0::EnvironmentModuleCore.Test.ParserTests.TestEscapeText&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;VsTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net8.0::executor://mstestadapter/v4#EnvironmentModuleCore.Test.ParserTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;VsTest::D8671F05-7FE2-4D8C-64DF-F3970ACFE57F::net8.0::executor://mstestadapter/v4#EnvironmentModuleCore.Test.TemplateRegressionTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

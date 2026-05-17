@@ -7,7 +7,7 @@ namespace EnvironmentModuleCore.Template
     {
         public TokenType TokenType { get; }
 
-        public string Value { get; }
+        public string Value { get; set; }
 
         public Token(TokenType tokenType, string value = null)
         {
