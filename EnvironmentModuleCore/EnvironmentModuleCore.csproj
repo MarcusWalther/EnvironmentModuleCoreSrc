@@ -33,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Scriban" Version="7.1.0" />
+		<InternalsVisibleTo Include="EnvironmentModuleCore.Test" />
 	</ItemGroup>
 
 </Project>

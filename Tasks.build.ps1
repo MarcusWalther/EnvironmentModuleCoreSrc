@@ -18,6 +18,10 @@ task Build Prepare, {
     dotnet $cmdArguments
 }
 
+task Test Prepare, {
+    dotnet test -o TestResults
+}
+
 task Pack {
     if(Test-Path "Package") {
         Remove-Item "Package" -Recurse

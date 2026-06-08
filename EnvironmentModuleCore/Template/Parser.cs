@@ -2,14 +2,114 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace EnvironmentModuleCore.Template
 {
     internal class Parser
     {
-        private IEnumerable<Token> ParseCommand(string command)
+        private static readonly Regex NUMBER_REGEX= new Regex(@"^-?\d+(\.\d+)?$");
+        private static readonly Regex STRING_REGEX = new Regex("^\".*\"$");
+        private static readonly HashSet<string> COMPARATORS = new HashSet<string>{ "!=", "==", "<", ">", "<=", ">=" };
+
+        internal string[] SplitCommand(string command)
         {
-            var parts = command.Trim().Split(' ');
+            HashSet<char> comparatorChars = new HashSet<char> { '!', '=', '>', '<' };
+
+            StringReader reader = new StringReader(command);
+
+            int character;
+            char lastCharacter = '\0';
+            string current = string.Empty;
+            bool isString = false;
+            List<string> result = new List<string>();
+
+            while ((character = reader.Read()) != -1)
+            {
+                char currentCharacter = (char)character;
+
+                if (currentCharacter == '"')
+                {
+                    if (isString)
+                    {
+                        // We found the end of the string
+                        current += currentCharacter;
+                        result.Add(current);
+                        current = string.Empty;
+                        isString = false;
+                    }
+                    else
+                    {
+                        // We found a string start
+                        if (current != string.Empty)
+                        {
+                            result.Add(current);
+                        }
+
+                        current = string.Empty + currentCharacter;
+                        isString = true;
+                    }
+
+                    lastCharacter = currentCharacter;
+                    continue;
+                }
+
+                if (isString)
+                {
+                    current += currentCharacter;
+                    lastCharacter = currentCharacter;
+                    continue;
+                }
+
+                if (currentCharacter == ' ')
+                {
+                    if (current != string.Empty)
+                    {
+                        result.Add(current);
+                    }
+
+                    current = string.Empty;
+                    lastCharacter = currentCharacter;
+                    continue;
+                }
+
+                if (comparatorChars.Contains(currentCharacter))
+                {
+                    if (current != string.Empty)
+                    {
+                        if (comparatorChars.Contains(lastCharacter))
+                        {
+                            current += currentCharacter;
+                        }
+                        else
+                        {
+                            result.Add(current);
+                            current = "" + currentCharacter;
+                        }
+                    }
+                    else
+                    {
+                        current += currentCharacter;
+                    }
+
+                    lastCharacter = currentCharacter;
+                    continue;
+                }
+
+                current += currentCharacter;
+                lastCharacter = currentCharacter;
+            }
+
+            if(current != string.Empty)
+                result.Add(current);
+
+            return result.ToArray();
+        }
+
+        internal IEnumerable<Token> ParseCommand(string command)
+        {
+            var parts = SplitCommand(command.Trim());
+
             foreach (var part in parts)
             {
                 if(string.IsNullOrWhiteSpace(part))
@@ -17,35 +117,71 @@ namespace EnvironmentModuleCore.Template
 
                 if (part.Equals("for", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    yield return new Token(TokenType.KEYWORD_FOR);
+                    yield return new Token(TokenType.KeywordFor);
                     continue;
                 }
 
                 if (part.Equals("in", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    yield return new Token(TokenType.KEYWORD_IN);
+                    yield return new Token(TokenType.KeywordIn);
                     continue;
                 }
 
                 if (part.Equals("end", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    yield return new Token(TokenType.KEYWORD_END);
+                    yield return new Token(TokenType.KeywordEnd);
                     continue;
                 }
 
                 if (part.Equals("if", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    yield return new Token(TokenType.KEYWORD_IF);
+                    yield return new Token(TokenType.KeywordIf);
                     continue;
                 }
 
                 if (part.Equals("else", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    yield return new Token(TokenType.KEYWORD_ELSE);
+                    yield return new Token(TokenType.KeywordElse);
                     continue;
                 }
 
-                yield return new Token(TokenType.PARAMETER, part);
+                if (part.Equals("&&", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    yield return new Token(TokenType.KeywordAnd);
+                    continue;
+                }
+
+                if (part.Equals("||", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    yield return new Token(TokenType.KeywordOr);
+                    continue;
+                }
+
+                if (part.Equals("null", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    yield return new Token(TokenType.KeywordNull);
+                    continue;
+                }
+
+                if (COMPARATORS.Contains(part))
+                {
+                    yield return new Token(TokenType.Comparator, part);
+                    continue;
+                }
+
+                if (NUMBER_REGEX.IsMatch(part))
+                {
+                    yield return new Token(TokenType.ConstNumber, part);
+                    continue;
+                }
+
+                if (STRING_REGEX.IsMatch(part))
+                {
+                    yield return new Token(TokenType.ConstString, part.Substring(1, part.Length - 2));
+                    continue;
+                }
+
+                yield return new Token(TokenType.Parameter, part);
             }
         }
 
@@ -89,14 +225,12 @@ namespace EnvironmentModuleCore.Template
                             escapeSequence = null;
                             continue;
                         }
-                        else
-                        {
-                            // This is something else, but not the end of the escape sequence
-                            currentToken += escapeSequence;
-                            escapeSequence = "" + currentCharacter;
-                            lastCharacter = currentCharacter;
-                            continue;
-                        }
+
+                        // This is something else, but not the end of the escape sequence
+                        currentToken += escapeSequence;
+                        escapeSequence = "" + currentCharacter;
+                        lastCharacter = currentCharacter;
+                        continue;
                     }
 
                     if (currentCharacter == '%')
@@ -111,7 +245,7 @@ namespace EnvironmentModuleCore.Template
                 }
 
                 // Detect trim command sequence for a command begin
-                if(endEscapeSequence == null && currentCharacter == '-' && string.IsNullOrEmpty(currentToken) && tokens.LastOrDefault()?.TokenType == TokenType.COMMAND_BEGIN) 
+                if(endEscapeSequence == null && currentCharacter == '-' && string.IsNullOrEmpty(currentToken) && tokens.LastOrDefault()?.TokenType == TokenType.CommandBegin) 
                 {
                     tokens.Last().Value += currentCharacter;
                     lastCharacter = currentCharacter;
@@ -123,10 +257,10 @@ namespace EnvironmentModuleCore.Template
                 {
                     if (currentToken != "{")
                     {
-                        tokens.Add(new Token(TokenType.TEXT, currentToken.TrimEnd('{')));
+                        tokens.Add(new Token(TokenType.Text, currentToken.TrimEnd('{')));
                     }
 
-                    tokens.Add(new Token(TokenType.COMMAND_BEGIN));
+                    tokens.Add(new Token(TokenType.CommandBegin));
                     handled = true;
                 }
 
@@ -145,11 +279,11 @@ namespace EnvironmentModuleCore.Template
                         if (lastToken.Value == "")
                             tokens.RemoveAt(tokens.Count - 1);
 
-                        tokens.Add(new Token(TokenType.COMMAND_END, "-"));
+                        tokens.Add(new Token(TokenType.CommandEnd, "-"));
                     }
                     else
                     {
-                        tokens.Add(new Token(TokenType.COMMAND_END));
+                        tokens.Add(new Token(TokenType.CommandEnd));
                     }
 
                     handled = true;
@@ -200,7 +334,7 @@ namespace EnvironmentModuleCore.Template
 
             if (!string.IsNullOrEmpty(currentToken))
             {
-                tokens.Add(new Token(TokenType.TEXT, currentToken.TrimEnd('{')));
+                tokens.Add(new Token(TokenType.Text, currentToken.TrimEnd('{')));
             }
 
             return new Template(tokens);

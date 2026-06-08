@@ -1,0 +1,1 @@
+A simple line of {{ for entry in Entries }} Entry: {{entry.Key}}:{{ entry.Value.Variable }} {{ end }}.

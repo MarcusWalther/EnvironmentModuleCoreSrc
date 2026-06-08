@@ -29,8 +29,8 @@ namespace EnvironmentModuleCore
             }
 
             string templateContent = File.ReadAllText(templateFile);
-            Scriban.Template template = Scriban.Template.Parse(templateContent);
-            string concreteContent = template.Render(modelDefinition, memberRenamer: member => member.Name);
+            Template.Template template = Template.Template.Parse(templateContent);
+            string concreteContent = template.Render(modelDefinition);
             File.WriteAllText(targetFile, concreteContent);
         }
 
@@ -44,8 +44,8 @@ namespace EnvironmentModuleCore
         public static void CreateConcreteFileFromTemplate(IDictionary<string, object> modelDefinition, string templateFile, string targetFile)
         {
             string templateContent = File.ReadAllText(templateFile);
-            Scriban.Template template = Scriban.Template.Parse(templateContent);
-            string concreteContent = template.Render(modelDefinition, memberRenamer: member => member.Name);
+            Template.Template template = Template.Template.Parse(templateContent);
+            string concreteContent = template.Render(modelDefinition);
             File.WriteAllText(targetFile, concreteContent);
         }
 

@@ -1,0 +1,1 @@
+A simple line of  Entry: A:VariableA  Entry: B:VariableB .

@@ -15,6 +15,15 @@ steps:
 - pwsh: Invoke-Build Build -Suffix "$(suffix)"
   displayName: 'Build the library'
 
+- pwsh: Invoke-Build Test -Suffix "$(suffix)"
+  displayName: 'Test the library'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: 'EnvironmentModuleCore.Test/TestResults/*.trx'
+    failTaskOnFailedTests: true
+
 - pwsh: Invoke-Build Pack -Suffix "$(suffix)"
   displayName: 'Pack the build'
 

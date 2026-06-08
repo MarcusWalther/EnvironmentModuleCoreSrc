@@ -101,11 +101,38 @@ namespace EnvironmentModuleCore.Test
         }
 
         [TestMethod]
+        public void TestRegressionSimpleForNull()
+        {
+            string name = "ExampleSimpleFor";
+            var model = new Dictionary<string, object>();
+            model["Entries"] = null;
+            Assert.AreEqual(RenderScriban(name, model), Render(name, model));
+        }
+
+        [TestMethod]
+        public void TestRegressionSimpleForNotSet()
+        {
+            string name = "ExampleSimpleFor";
+            var model = new Dictionary<string, object>();
+            Assert.AreEqual(RenderScriban(name, model), Render(name, model));
+        }
+
+        [TestMethod]
         public void TestRegressionComplexFor()
         {
             string name = "ExampleComplexFor";
             var model = new Dictionary<string, object>();
             model["Entries"] = new List<DummyDependencyClass> { new("My Module A", true), new("MyModuleB") };
+
+            Assert.AreEqual(RenderScriban(name, model), Render(name, model));
+        }
+
+        [TestMethod]
+        public void TestRegressionDictFor()
+        {
+            string name = "ExampleDictFor";
+            var model = new Dictionary<string, object>();
+            model["Entries"] = new Dictionary<string, DummyClass> { { "A", new("VariableA") }, { "B", new("VariableB") } };
 
             Assert.AreEqual(RenderScriban(name, model), Render(name, model));
         }

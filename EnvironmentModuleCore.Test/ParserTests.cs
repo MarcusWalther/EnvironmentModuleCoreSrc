@@ -38,11 +38,11 @@ namespace EnvironmentModuleCore.Test
             string content = GetExampleContent("ExampleSimple");
             var template = Template.Template.Parse(content);
             Assert.HasCount(5, template.Tokens);
-            Assert.AreEqual(TokenType.TEXT, template.Tokens[0].TokenType);
-            Assert.AreEqual(TokenType.COMMAND_BEGIN, template.Tokens[1].TokenType);
-            Assert.AreEqual(TokenType.PARAMETER, template.Tokens[2].TokenType);
-            Assert.AreEqual(TokenType.COMMAND_END, template.Tokens[3].TokenType);
-            Assert.AreEqual(TokenType.TEXT, template.Tokens[4].TokenType);
+            Assert.AreEqual(TokenType.Text, template.Tokens[0].TokenType);
+            Assert.AreEqual(TokenType.CommandBegin, template.Tokens[1].TokenType);
+            Assert.AreEqual(TokenType.Parameter, template.Tokens[2].TokenType);
+            Assert.AreEqual(TokenType.CommandEnd, template.Tokens[3].TokenType);
+            Assert.AreEqual(TokenType.Text, template.Tokens[4].TokenType);
             
             Assert.AreEqual("A simple line of ", template.Tokens[0].Value);
             Assert.AreEqual("Variable", template.Tokens[2].Value);
@@ -63,7 +63,7 @@ namespace EnvironmentModuleCore.Test
             var template = Template.Template.Parse(content);
             Assert.HasCount(1, template.Tokens);
 
-            Assert.AreEqual(TokenType.TEXT, template.Tokens[0].TokenType);
+            Assert.AreEqual(TokenType.Text, template.Tokens[0].TokenType);
             Assert.AreEqual("  A simple line of text.  ", template.Tokens[0].Value);
         }
 
@@ -77,7 +77,7 @@ namespace EnvironmentModuleCore.Test
             var template = Template.Template.Parse(content);
             Assert.HasCount(1, template.Tokens);
 
-            Assert.AreEqual(TokenType.TEXT, template.Tokens[0].TokenType);
+            Assert.AreEqual(TokenType.Text, template.Tokens[0].TokenType);
             Assert.AreEqual("Hello this is {{ name }}", template.Tokens[0].Value);
         }
 
@@ -91,9 +91,9 @@ namespace EnvironmentModuleCore.Test
             var template = Template.Template.Parse(content);
             Assert.HasCount(3, template.Tokens);
 
-            Assert.AreEqual(TokenType.COMMAND_BEGIN, template.Tokens[0].TokenType);
-            Assert.AreEqual(TokenType.PARAMETER, template.Tokens[1].TokenType);
-            Assert.AreEqual(TokenType.COMMAND_END, template.Tokens[2].TokenType);
+            Assert.AreEqual(TokenType.CommandBegin, template.Tokens[0].TokenType);
+            Assert.AreEqual(TokenType.Parameter, template.Tokens[1].TokenType);
+            Assert.AreEqual(TokenType.CommandEnd, template.Tokens[2].TokenType);
             Assert.AreEqual("Variable", template.Tokens[1].Value);
 
             // Check if a dynamic object variable is rendered correctly
@@ -112,10 +112,10 @@ namespace EnvironmentModuleCore.Test
             string content = GetExampleContent("ExampleTrimmedVariable");
             var template = Template.Template.Parse(content);
 
-            Assert.AreEqual(TokenType.COMMAND_BEGIN, template.Tokens[1].TokenType);
+            Assert.AreEqual(TokenType.CommandBegin, template.Tokens[1].TokenType);
             Assert.AreEqual("-", template.Tokens[1].Value);
-            Assert.AreEqual(TokenType.PARAMETER, template.Tokens[2].TokenType);
-            Assert.AreEqual(TokenType.COMMAND_END, template.Tokens[3].TokenType);
+            Assert.AreEqual(TokenType.Parameter, template.Tokens[2].TokenType);
+            Assert.AreEqual(TokenType.CommandEnd, template.Tokens[3].TokenType);
             Assert.AreEqual("Variable", template.Tokens[2].Value);
 
             // Check if a dynamic object variable is rendered correctly
@@ -186,6 +186,31 @@ namespace EnvironmentModuleCore.Test
         }
 
         /// <summary>
+        /// Check if a complex "if" condition is parsed and rendered correctly.
+        /// </summary>
+        [TestMethod]
+        public void TestIfCondition()
+        {
+            string content = GetExampleContent("ExampleIfCondition");
+            var template = Template.Template.Parse(content);
+
+            Assert.HasCount(16, template.Tokens);
+            Assert.AreEqual(TokenType.Comparator, template.Tokens[4].TokenType);
+
+            var data = new Dictionary<string, object>();
+            data["Value"] = "something";
+            Assert.AreEqual("A simple line of  conditional text .", template.Render(data));
+
+            data = new Dictionary<string, object>();
+            data["Value"] = "";
+            Assert.AreEqual("A simple line of .", template.Render(data));
+
+            data = new Dictionary<string, object>();
+            data["Value"] = null;
+            Assert.AreEqual("A simple line of .", template.Render(data));
+        }
+
+        /// <summary>
         /// Check if a simple "if-else" condition is parsed and rendered correctly.
         /// </summary>
         [TestMethod]
@@ -222,6 +247,22 @@ namespace EnvironmentModuleCore.Test
         }
 
         /// <summary>
+        /// Check if a simple "for" condition is parsed and rendered correctly if the value is null.
+        /// </summary>
+        [TestMethod]
+        public void TestSimpleForNullValue()
+        {
+            string content = GetExampleContent("ExampleSimpleFor");
+            var template = Template.Template.Parse(content);
+
+            Assert.HasCount(16, template.Tokens);
+
+            dynamic data = new ExpandoObject();
+            // data.Entries = new List<DummyClass> { new("VariableA"), new("VariableB") };
+            Assert.AreEqual("A simple line of .", template.Render(data));
+        }
+
+        /// <summary>
         /// Check if a complex "for" condition is parsed and rendered correctly.
         /// </summary>
         [TestMethod]
@@ -233,6 +274,21 @@ namespace EnvironmentModuleCore.Test
 
             dynamic data = new ExpandoObject();
             data.Entries = new List<DummyDependencyClass> { new("My Module A", true), new("MyModuleB") };
+            Assert.AreEqual(expected, template.Render(data));
+        }
+
+        /// <summary>
+        /// Check if a dictionary based "for" condition is parsed and rendered correctly.
+        /// </summary>
+        [TestMethod]
+        public void TestDictFor()
+        {
+            string content = GetExampleContent("ExampleDictFor");
+            string expected = GetExpectedContent("ExampleDictFor");
+            var template = Template.Template.Parse(content);
+
+            dynamic data = new ExpandoObject();
+            data.Entries = new Dictionary<string, DummyClass> { {"A", new("VariableA")}, {"B", new("VariableB") } };
             Assert.AreEqual(expected, template.Render(data));
         }
     }
